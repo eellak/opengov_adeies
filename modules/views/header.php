@@ -7,8 +7,8 @@
 
     <title>Περιφέρεια Δυτικής Μακεδονίας<?php print_title(); ?></title>
 	
-	<?php print_css(); ?>
-	<?php print_js(true); ?>
+	<?php print_css(); 		// Print the CSS needed ?>
+	<?php print_js(true);   // Print the JS needed in head ?>
 	
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

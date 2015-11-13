@@ -10,12 +10,12 @@ if (!user_is_logged_in()) {			// Check if User is Logged In
 }else{
 	
 	initiate();						// Initiate all Needed Variables/Methods
-	//debug();
+	debug();
 	
 	if(isset($_GET['p']))
-		load_page(trim($_GET['p']));
+		load_page(trim($_GET['p']));	// If set Load Page..
 	else
-		load_home();
+		load_home();					// else Load Home
 }
 
 ?>

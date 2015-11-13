@@ -27,8 +27,8 @@ global 	$user_auth,						// Session Management
 		$application_list,				// Application List of the User
 		$css_files,						// CSS Files to be Loaded
 		$js_files,						// JS Files to be Loaded
-		$app_title,
-		$user_menu,
-		$side_menu,
-		$message_list;
+		$app_title,						// Environment Title
+		$user_menu,						// Top Right Menu
+		$side_menu,						// Sidebar Menu
+		$message_list;					// Messages Produced
 ?>

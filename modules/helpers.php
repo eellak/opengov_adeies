@@ -2,23 +2,32 @@
 	
 	// Contains helper functions not related to any specific module.
 	
+	/* 	-------------------------------------------------------------------------------------
+	*  Used for debugging purposes
+	*  -------------------------------------------------------------------------------------*/
 	function debug(){
-		
-		global 	$user_auth,	 $db, $application_list;
-		
-		$attributes = $user_auth->getAttributes();
-		echo '<h4>User Attributes</h4>';
-		echo print_pretty($attributes);
+		if(isset($_GET['debug'])){
+			global 	$user_auth,	 $db, $application_list, $user;
+			
+			echo '<h4>User Record</h4>';
+			echo print_pretty((array)$user);
+			
+			$attributes = $user_auth->getAttributes();
+			echo '<h4>User Attributes</h4>';
+			echo print_pretty($attributes);
 
-		echo '<h4>User Session (SimpleSAMLphp_SESSION)</h4>';
-		$saml_session =  (array) unserialize($_SESSION['SimpleSAMLphp_SESSION']);
-		echo print_pretty($saml_session);
-		
-		echo '<h4>Application List</h4>';
-		echo print_pretty($application_list);
-		
+			echo '<h4>User Session (SimpleSAMLphp_SESSION)</h4>';
+			$saml_session =  (array) unserialize($_SESSION['SimpleSAMLphp_SESSION']);
+			echo print_pretty($saml_session);
+			
+			echo '<h4>Application List</h4>';
+			echo print_pretty($application_list);
+		}
 	}
 	
+	/* 	-------------------------------------------------------------------------------------
+	*  Prints Array on Object in listed tree structure
+	*  -------------------------------------------------------------------------------------*/
 	function print_pretty($arr){
 		$retStr = '<ul>';
 		if (is_array($arr)){
@@ -37,7 +46,10 @@
 		$retStr .= '</ul>';
 		return $retStr;
 	}
-
+	
+	/* 	-------------------------------------------------------------------------------------
+	*  Checks if data is serialized or not
+	*  -------------------------------------------------------------------------------------*/
 	function is_serialized( $data ) {
 		// if it isn't a string, it isn't serialized
 		if ( !is_string( $data ) )
@@ -64,6 +76,9 @@
 		return false;
 	}
 	
+	/* 	-------------------------------------------------------------------------------------
+	*  Class to help debug PDO errors (1/2)
+	*  -------------------------------------------------------------------------------------*/
 	class PDOTester extends PDO {
 		public function __construct($dsn, $username = null, $password = null, $driver_options = array())
 		{
@@ -71,6 +86,12 @@
 			$this->setAttribute(PDO::ATTR_STATEMENT_CLASS, array('PDOStatementTester', array($this)));
 		}
 	}
+	
+	/* 	-------------------------------------------------------------------------------------
+	*  Class to help debug PDO errors (2/2)
+	*  Used the same way as normal PDO statements
+	*  Use stm->getSQL to get the final prepared SQL.
+	*  -------------------------------------------------------------------------------------*/
 	class PDOStatementTester extends PDOStatement {
 		const NO_MAX_LENGTH = -1;
 		

@@ -8,5 +8,7 @@
 	
 	function init_leaves(){
 		leaves_sidebar();		// Initiate the menus
+		prepare_pages();		// Prepare pages (css, javascripts etc)
 	}
+	
 ?>

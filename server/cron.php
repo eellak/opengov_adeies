@@ -59,7 +59,7 @@ if (FALSE === $ldap_connection){
 				foreach($ad_users as $username => $user){
 					if ($db) {
 						// TODO: Check if exists
-						$query = $db->prepare('INSERT INTO main_users (id, username, email, first_name, last_name, amka, afm, type, auto_id, usage_code,  date_hired, date_permanent, num_leaves, past_leaves, reamaining_leaves, unit_p, unit_t, unit_g, unit_gd) VALUES(NULL, :username, :email, :first_name, :last_name, :amka, :afm, :type, :auto_id, :usage_code, :date_hired, :date_permanent, :num_leaves, :past_leaves, :reamaining_leaves, :unit_p, :unit_t, :unit_g, :unit_gd)');
+						$query = $db->prepare('INSERT INTO main_users (id, username, email, first_name, last_name, amka, afm, type, auto_id, usage_code,  date_hired, date_permanent, num_leaves, past_leaves, remaining_leaves, unit_p, unit_t, unit_g, unit_gd) VALUES(NULL, :username, :email, :first_name, :last_name, :amka, :afm, :type, :auto_id, :usage_code, :date_hired, :date_permanent, :num_leaves, :past_leaves, :remaining_leaves, :unit_p, :unit_t, :unit_g, :unit_gd)');
 						
 						$query->bindValue(':username', 			$username, 				PDO::PARAM_STR);
 						$query->bindValue(':email', 			$user['email'], 		PDO::PARAM_STR);
@@ -97,7 +97,7 @@ if (FALSE === $ldap_connection){
 						// TODO: Calculate Leave Dates
 						$query->bindValue(':num_leaves', 		'25', 			PDO::PARAM_INT);
 						$query->bindValue(':past_leaves', 		'0', 			PDO::PARAM_INT);
-						$query->bindValue(':reamaining_leaves', '25', 			PDO::PARAM_INT);
+						$query->bindValue(':remaining_leaves', '25', 			PDO::PARAM_INT);
 					
 						$query->execute();
 						

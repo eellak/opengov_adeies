@@ -18,11 +18,13 @@
 		include(ABSPATH.'applist.php');
 		load_applications($all_apps);			// Load App List for the User
 		set_connection();						// Start the Database Connection
+		get_user_details();						// Get the User Record from the DB
 	}
 	
 	function set_connection(){	// Initiates the Database Connection
 		global $db;
-		$db =  new PDO('mysql:host='. DB_HOST .';dbname='. DB_NAME . ';charset=utf8', DB_USER, DB_PASS);
+		//$db =  new PDO('mysql:host='. DB_HOST .';dbname='. DB_NAME . ';charset=utf8', DB_USER, DB_PASS);
+		$db = new PDOTester('mysql:host='. DB_HOST .';dbname='. DB_NAME . ';charset=utf8', DB_USER, DB_PASS);
 	}
 	
 ?>
