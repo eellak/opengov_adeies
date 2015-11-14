@@ -12,6 +12,7 @@
 				<label>Όνομα</label>
 				<p class="form-control-static"><?php echo $leave_user->first_name; ?></p>
 			</div>
+			<!--
 			<div class="form-group">
 				<label>Γενική Διεύθυνση</label>
 				<p class="form-control-static"><?php  ?></p>
@@ -27,10 +28,13 @@
 			<div class="form-group">
 				<label>Βαθμός</label>
 				<p class="form-control-static"><?php ?></p>
-			</div> 
+			</div> -->
 		</div>
 	</div>
 </div>
+<?php
+	$leave_user_stats = get_leave_user_stats($leave_user);
+?>
 <div class="col-lg-3">
 	<div class="panel panel-yellow">
 		<div class="panel-heading">
@@ -39,15 +43,15 @@
 		<div class="col-lg-12">
 			<div class="form-group">
 				<label>Μέγιστος Αριθμός Αδειών</label>
-				<p class="form-control-static"><?php  echo $leave_user->num_leaves; ?></p>
+				<p class="form-control-static"><?php  echo $leave_user_stats->num_leaves; ?></p>
 			</div>
 			<div class="form-group">
 				<label>Τρέχον Υπόλοιπο Αδειών</label>
-				<p class="form-control-static"><?php  echo $leave_user->remaining_leaves; ?></p>
+				<p class="form-control-static"><?php  echo $leave_user_stats->remaining_leaves; ?></p>
 			</div>
 			<div class="form-group">
 				<label>Παλαιό Υπόλοιπο Αδειών</label>
-				<p class="form-control-static"><?php  echo $leave_user->past_leaves; ?></p>
+				<p class="form-control-static"><?php  echo $leave_user_stats->past_leaves; ?></p>
 			</div>
 		</div>
 	</div>

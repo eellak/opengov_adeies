@@ -45,7 +45,10 @@
 								echo "<td>".get_leave_type($leave)."</td>";
 								echo "<td>".$leave['num_leaves']."</td>";
 								echo "<td>".get_leave_status($leave)."</td>";
-								echo "<td><a href='".URL."/?p=leaves|edit&id=".$leave['leave_id']."'><button type='button' class='btn btn-primary btn-circle'><i class='fa fa-list'></i></button></a></td>";
+								if($leave['signature_by'] == 0)
+									echo "<td><a href='".URL."/?p=leaves|edit&id=".$leave['leave_id']."'><button type='button' class='btn btn-primary btn-circle'><i class='fa fa-pencil'></i></button></a></td>";
+								else
+									echo "<td>&nbsp;</td>";
 								echo '</tr>';
 							}
 						?>

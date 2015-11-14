@@ -36,8 +36,8 @@
 								echo "<td>".get_leave_type($leave)."</td>";
 								echo "<td>".$leave['num_leaves']."</td>";
 								echo "<td>".get_leave_status($leave)."</td>";
-								echo "<td><a href='".URL."/?p=leaves|single&id=".$leave['leave_id']."'><button type='button' class='btn btn-primary btn-circle'><i class='fa fa-list'></i></button></a>&nbsp&nbsp";
-								echo "<a href=''><button type='button' class='btn btn-success btn-circle'><i class='fa fa-link'></i></button></a></td>";
+								echo "<td><a href='".URL."/?p=leaves|single&id=".$leave['leave_id']."'><button type='button' class='btn btn-primary btn-circle'><i class='fa fa-eye'></i></button></a>&nbsp&nbsp";
+								//echo "<a href=''><button type='button' class='btn btn-success btn-circle'><i class='fa fa-link'></i></button></a></td>";
 								echo '</tr>';
 							}
 						?>

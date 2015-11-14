@@ -10,7 +10,7 @@
 		
 		if(get_user_is('director')){
 			$side_menu[] = array('url' => URL.'/?p=leaves|applications', 	'class' => 'fa fa-users fa-fw', 		'text' => 'Αιτήσεις Υπαλλήλων');
-			$side_menu[] = array('url' => URL.'/?p=leaves|statistics', 	'class' => 'fa fa-bar-chart-o fa-fw', 	'text' => 'Στατιστικά Αδειών');
+			//$side_menu[] = array('url' => URL.'/?p=leaves|statistics', 	'class' => 'fa fa-bar-chart-o fa-fw', 	'text' => 'Στατιστικά Αδειών');
 		}
 	}
 	

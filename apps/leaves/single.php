@@ -12,7 +12,7 @@
 <?php
 	} else{
 		global $leave_user;
-		$leave_user = $user;
+		$leave_user = get_leave_user($leave->employee_afm);
 		
 		$class = 'info';
 		$title = 'Η αίτηση βρίσκεται σε στάδιο αξιολόγησης';
@@ -38,12 +38,32 @@
 							<div class="panel-heading">
 								Στοιχεία Άδειας
 							</div>
-							<div class="col-lg-12"> <!--
+							<div class="col-lg-12"> 
 								<div class="form-group">
-									<label>Σχόλια</label><p class="form-control-static">
-									<textarea name="sxolia" id="sxolia" rows="6" cols="25" placeholder="Συμπληρώστε το σε περίπτωση απόρριψης της αίτησης"></textarea></p>
+									<label class="<?php echo $class; ?>"><?php echo $title; ?></label>
 								</div>
-								-->
+							<?php
+								if($leave->signature_by != 0){  ?>
+									<div class="form-group">
+										<label>Επεξεργάστηκε απο</label>
+										<?php $user_leave_signed = get_leave_user($leave->signature_by); ?>
+										<p class="form-control-static"><?php echo  $user_leave_signed->last_name.' '.$user_leave_signed->first_name; ?></p>
+									</div>
+									<div class="form-group">
+										<label>Ημερομηνία Επεξεργασίας</label>
+										<p class="form-control-static"><?php echo $leave->signature_date; ?></p>
+									</div>
+								<?php 
+									if($leave->status == 0){
+								?>
+									<div class="form-group">
+										<label>Σχόλιο</label>
+										<p class="form-control-static"><?php echo $leave->comments; ?></p>
+									</div>
+								<?php
+									}
+								}
+							?>
 							</div>
 						</div>
 					</div>

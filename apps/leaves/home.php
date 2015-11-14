@@ -1,5 +1,16 @@
 <div class="row">
-	<?php if(get_user_is('director')){  ?>
+	<?php 
+		if(get_user_is('director')){  
+		$count_new = 0;
+		$count_ready = 0;
+		$my_leaves =  get_my_employees_leaves();
+		foreach($my_leaves as $leave){
+			if($leave['signature_by'] != 0) 
+				$count_ready++;
+			else
+				$count_new++;
+		}
+	?>
 		<div class="col-lg-3 col-md-6">
 			<div class="panel panel-yellow">
 				<div class="panel-heading">

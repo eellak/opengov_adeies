@@ -1,3 +1,11 @@
 .panel  > .col-lg-12 {
     margin-top: 20px;
 }
+
+.form-group label.danger {
+	color: red;
+}
+
+.form-group label.success {
+	color: green;
+}
