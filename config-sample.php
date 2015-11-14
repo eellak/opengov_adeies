@@ -20,6 +20,11 @@ define('URL',			'0');		// The main URL of the site
 define('SIMPLESAMLPHP', '/usr/share/simplesamlphp/lib/_autoload.php');	// The SimpleSAMLPHP library path
 define('WSO2', 			'');		// The WSO2 Server URL
 
+define('SMTP_HOST', 	'');		// SMTP Host 
+define('SMTP_EMAIL', 	'');		// SMTP eMail 
+define('SMTP_USER', 	'');		// SMTP Username
+define('SMTP_PASS', 	'');		// SMTP Password
+
 // ------ Global Variables ----------------------//
 
 global 	$user_auth,						// Session Management
