@@ -1,6 +1,8 @@
 <?php
 	
 	function leaves_sidebar(){
+		global $application_list ;
+		global $user;
 		global $side_menu;
 		$side_menu = array( 
 			array('url' => URL.'/?p=leaves|home', 			'class' => 'fa fa-home fa-fw', 			'text' => 'Εφαρμογή Αδειών'),
@@ -10,7 +12,9 @@
 		
 		if(get_user_is('director')){
 			$side_menu[] = array('url' => URL.'/?p=leaves|applications', 	'class' => 'fa fa-users fa-fw', 		'text' => 'Αιτήσεις Υπαλλήλων');
-			//$side_menu[] = array('url' => URL.'/?p=leaves|statistics', 	'class' => 'fa fa-bar-chart-o fa-fw', 	'text' => 'Στατιστικά Αδειών');
+			if($user->username == $application_list['leaves']['in_app_users']['statistics']){
+				$side_menu[] = array('url' => URL.'/?p=leaves|statistics', 	'class' => 'fa fa-bar-chart-o fa-fw', 	'text' => 'Στατιστικά Αδειών');
+			}
 		}
 	}
 	

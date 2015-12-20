@@ -12,8 +12,9 @@
 	require_once(ABSPATH.'modules/user/user.php');		// Load User Management Module
 	require_once(ABSPATH.'modules/apps/apps.php');		// Load Applications Management Module
 	require_once(ABSPATH.'modules/notify/notify.php');	// Load eMail functionality
+	require_once(ABSPATH.'modules/print/print.php');	// Load PDF Related Module
 	require_once(ABSPATH.'modules/views/views.php');	// Load Views Related Module
-	
+
 	function initiate(){
 		include(ABSPATH.'applist.php');
 		load_applications($all_apps);			// Load App List for the User

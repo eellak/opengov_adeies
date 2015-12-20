@@ -76,7 +76,12 @@
 	*	Check if user id Director or Employee
 	*  -------------------------------------------------------------------------------------*/
 	function get_user_is($type){
-		global $user;	
+		global $user;
+		if(trim($type) == 'director'){
+			if(trim($user->type) == 'proist/nos_diefthyns') 	return true;
+			if(trim($user->type) == 'proist/nos_tmimatos') 		return true;
+			if(trim($user->type) == 'proist/nos_gen_dieft') 	return true;
+		}
 		return trim($user->type) == trim($type);
 	}
 	

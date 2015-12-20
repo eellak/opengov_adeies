@@ -5,18 +5,24 @@ function initiate_email(){
 	
 	require_once(ABSPATH.'lib/phpmailer/PHPMailerAutoload.php');
 	$mail = new PHPMailer;
+	$mail->CharSet = "UTF-8";
 	$mail->isSMTP();
 	// 0 = off (for production use)
 	// 1 = client messages
 	// 2 = client and server messages
-	$mail->SMTPDebug = 2;
+	if(DEBUG)
+		$mail->SMTPDebug = 2;
+	else
+		$mail->SMTPDebug = 0;
 	$mail->Debugoutput = 'html';
 	$mail->Host = SMTP_HOST;
 	$mail->Port = 25;
+	$mail->SMTPSecure = '';
+	$mail->SMTPAutoTLS = false;
 	$mail->SMTPAuth = true;
 	$mail->Username = SMTP_USER;
 	$mail->Password = SMTP_PASS;
-	$mail->setFrom(SMTP_EMAIL, 'Leaves Applications');
+	$mail->setFrom(SMTP_EMAIL, 'Περιφέρεια Δυτικής Μακεδονίας');
 	
 }
 

@@ -76,6 +76,15 @@
 		return false;
 	}
 	
+	function get_rand_id($length) {
+		$key = '';
+		$keys = array_merge(range(0, 9), range('a', 'z'));
+		for ($i = 0; $i < $length; $i++) {
+			$key .= $keys[array_rand($keys)];
+		}
+		return $key;
+	}
+	
 	/* 	-------------------------------------------------------------------------------------
 	*  Class to help debug PDO errors (1/2)
 	*  -------------------------------------------------------------------------------------*/

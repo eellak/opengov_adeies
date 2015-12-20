@@ -36,17 +36,19 @@
 						<?php if(get_user_is('director')){  ?>
 							<div class="radio">
 								<label>
-									<input type="radio" name="leave_type" id="leave_type_tel" value="2">Τηλεφωνική, για λογαριασμό του/της: 
-									<select name="user_tel" id="user_tel">
-									<?php 
-										$employees = get_employees(); 
-										foreach($employees as $employee){
-											echo '<option value="'.$employee['afm'].'">'.$employee['last_name'].' '.$employee['first_name'].'</option>';
-										}
-									?>
-									</select>
+									<input type="radio" name="leave_type" id="leave_type_tel" value="2">Τηλεφωνική, για: 
 								</label>
 							</div>
+							</div>
+							<div class="form-group">
+								<select name="user_tel" class="form-control" id="user_tel">
+								<?php 
+									$employees = get_employees(); 
+									foreach($employees as $employee){
+										echo '<option value="'.$employee['afm'].'">'.$employee['last_name'].' '.$employee['first_name'].'</option>';
+									}
+								?>
+								</select>
 						<?php } ?>
 					</div>
 				</div>
