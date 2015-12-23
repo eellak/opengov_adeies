@@ -1,5 +1,6 @@
 <?php
 
+    //Επιλογή php αρχείων για εισαγωγή
 	require_once(ABSPATH.'apps/leaves/functions.php');
 	require_once(ABSPATH.'apps/leaves/views.php');
 	

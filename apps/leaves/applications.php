@@ -32,19 +32,26 @@
 						</thead>
 						<tbody>
 						<?php 
+						//Ερώτημα για εμφάνιση αδειών των υφισταμένων
 							$my_leaves =  get_my_employees_leaves();
 							foreach($my_leaves as $leave){
+								//Κλήση μεθόδου για αναζήτηση στοιχείων υπαλλήλου
 								$user = get_user_details_by_afm($leave['employee_afm']);
 								$class = 'info';
+								//Ορισμός κατάστασης άδειας
 								if($leave['signature_by'] != 0 and $leave['status'] == 1)  $class = 'success';
 								if($leave['signature_by'] != 0 and $leave['status'] == 0)  $class = 'danger';
 								echo "<tr class='$class'>";
+								//Πίνακας με τα στοιχεία της άδειας
 								echo "<td>".$leave['date_submitted']."</td>";
 								echo "<td>".$user->last_name."</td>";
 								echo "<td>".$user->first_name."</td>";
+								//Κλήση μεθόδου για αναζήτηση τύπου άδειας
 								echo "<td>".get_leave_type($leave)."</td>";
 								echo "<td>".$leave['num_leaves']."</td>";
+								//Κλήση μεθόδου για αναζήτηση κατάστασης άδειας
 								echo "<td>".get_leave_status($leave)."</td>";
+								//Αν δεν έχει αξιολογηθεί η αίτηση άδειας εμφάνιση επιλογής για επεξεργασία
 								if($leave['signature_by'] == 0)
 									echo "<td><a href='".URL."/?p=leaves|edit&id=".$leave['leave_id']."'><button type='button' class='btn btn-primary btn-circle'><i class='fa fa-pencil'></i></button></a></td>";
 								else
