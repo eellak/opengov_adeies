@@ -6,13 +6,13 @@
 </div>
 
 <?php 
-	$leave = get_leave(trim($_GET['id'])) ;
+	$leave = get_leave(trim($_GET['id'])) ; //Φόρτωση άδειας βάσει ID
 	if(empty($leave)){ ?>
 		<div class="row"><div class="col-sm-12"><div id="errorer" class="alert alert-danger">Η Αίτηση Δεν Εντοπίστηκε</div></div></div>
 <?php
 	} else{
 		global $leave_user;
-		$leave_user = get_leave_user($leave->employee_afm);
+		$leave_user = get_leave_user($leave->employee_afm); //Φόρτωση υφισταμένου βάσει ΑΦΜ
 		
 		$class = 'info';
 		$title = 'Η αίτηση βρίσκεται σε στάδιο αξιολόγησης';

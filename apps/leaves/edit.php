@@ -6,20 +6,20 @@
 </div>
 
 <?php 
-	$leave = get_employee_leave(trim($_GET['id'])) ;
-	if(empty($leave)){ ?>
+	$leave = get_employee_leave(trim($_GET['id'])) ; //Αναζήτηση αίτησης άδειας βάσει id υφισταμένου
+	if(empty($leave)){ //Μήνυμα σφάλματος σε περίπτωση μή εύρεσης αίτησης ?> 
 		<div class="row"><div class="col-sm-12"><div id="errorer" class="alert alert-danger">Η Αίτηση Δεν Εντοπίστηκε</div></div></div>
 <?php
 	} else{
-		$leave_user = get_user_details_by_afm($leave->employee_afm);
+		$leave_user = get_user_details_by_afm($leave->employee_afm); //Φόρτωση πληροφοριών χρήστη βάσει ΑΦΜ
 	
 		$class = 'info';
 		$title = 'Η αίτηση βρίσκεται σε στάδιο αξιολόγησης';
-		if($leave->signature_by != 0 and $leave->status == 1){  
+		if($leave->signature_by != 0 and $leave->status == 1){  //Σε περίπτωση που είναι υπογεγραμμένη και έχει κατάσταση '1'
 			$title = 'Η αίτηση εγκρίθηκε';
 			$class = 'success';
 		}
-		if($leave->signature_by != 0 and $leave->status == 0){  
+		if($leave->signature_by != 0 and $leave->status == 0){  //Σε περίπτωση που είναι υπογεγραμμένη και έχει κατάσταση '0'
 			$title = 'Η αίτηση απορρίφθηκε';
 			$class = 'danger';
 		}
@@ -58,7 +58,7 @@
 									</div>
 									<div class="form-group">
 										<p class="form-control-static">
-											<input type="hidden" name="leave_id" value="<?php echo $leave->leave_id; ?>" />
+											<input type="hidden" name="leave_id" value="<?php echo $leave->leave_id; //Εμφάνιση του ID της αίτησης ?>" />
 											<button type="submit" class="btn btn-outline btn-success">Αποθήκευση</button>
 										</p>
 									</div>

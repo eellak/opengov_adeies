@@ -1,8 +1,8 @@
 <?php
 	
-	function get_remaining_leaves(){
+	function get_remaining_leaves(){ //Μέθοδος για εμφάνιση υπολοίπου ημερών άδειας τρέχοντος χρήστη
 		global $db, $user;
-		if(!empty($user->unit_g)){
+		if(!empty($user->unit_g)){ //Αν ο χρήστης έχει κάνει αίτηση για άδεια
 			$query = $db->prepare('SELECT * FROM `leaves` where id = :user_id' );
 			
 			$query->bindValue(':user_id', 	$user->id,				PDO::PARAM_STR); 	
@@ -13,7 +13,7 @@
 		}
 	}
 	
-	function get_remaining_leaves_for_user($user_id){
+	function get_remaining_leaves_for_user($user_id){ //Μέθοδος για εμφάνιση υπολοίπου ημερών άδειας οποιουδήποτε χρήστη
 		global $db, $user;
 		
 		$query = $db->prepare('SELECT * FROM `leaves` where id = :user_id' );
@@ -29,7 +29,7 @@
 	*	Save New Application Details
 	*  -------------------------------------------------------------------------------------*/
 	function save_new_application(){
-		if(isset($_POST['num_leaves']) and intval(trim($_POST['num_leaves'])) > 0){
+		if(isset($_POST['num_leaves']) and intval(trim($_POST['num_leaves'])) > 0){ //Αν ο αριθμός ημερών δεν είναι κενός και το αριθμός είναι μεγαλύτερος του 0
 			global $db, $user, $message_list;
 			
 			// Check if the number of days requested is available (remaining days)
@@ -106,19 +106,19 @@
 		}
 	}
 	
-	function get_leave_type($leave){
+	function get_leave_type($leave){ //Τύποι άδειας
 		if($leave['type_id'] == 0 ) return 'Κανονική';
 		if($leave['type_id'] == 1 ) return 'Σχολική';
 		if($leave['type_id'] == 2 ) return 'Τηλεφωνική';
 	}
 	
-	function get_leave_status($leave){
+	function get_leave_status($leave){ //Κατάσταση άδειας
 		if($leave['signature_by'] != 0 and $leave['status'] == 1)  return 'Εγκεκριμένη';
 		if($leave['signature_by'] != 0 and $leave['status'] == 0)  return 'Απορρίφθηκε';
 		return 'Υπο Εξέταση';
 	}
 	
-	function get_my_leaves($afm = ''){
+	function get_my_leaves($afm = ''){ //Φόρτωση αιτήσεων άδειας βάσει ΑΦΜ
 		global $db, $user, $message_list;
 		$query = $db->prepare('SELECT * from leaves_submissions where employee_afm=:employee_afm');
 		
@@ -131,7 +131,7 @@
 		return $query->fetchAll();	
 	}
 	
-	function get_my_employees_leaves(){
+	function get_my_employees_leaves(){ //Εμφάνιση αιτήσεων άδειας των υφισταμένων ενός χρήστη
 		global $db, $user, $message_list;
 		if(!empty($user->unit_gd)){
 		
@@ -158,7 +158,7 @@
 		}
 	}
 	
-	function get_leave_user($employee_afm){
+	function get_leave_user($employee_afm){ //Εμφάνιση χρήστη βάσει ΑΦΜ
 		global $db;
 		$query = $db->prepare('SELECT * from main_users where afm =:afm ');
 		
@@ -167,7 +167,7 @@
 		return $query->fetchObject();	
 	}
 	
-	function get_leave_user_stats($leave_user){
+	function get_leave_user_stats($leave_user){ //Εμφάνιση άδειας βάσει ID χρήστη
 		global $db;
 		$query = $db->prepare('SELECT * from leaves where id =:id ');
 		
@@ -176,7 +176,7 @@
 		return $query->fetchObject();	
 	}
 	
-	function get_leave($leave_id){
+	function get_leave($leave_id){ //Εμφάνιση άδειας βάσει ID άδειας και ΑΦΜ χρήστη
 		global $db, $user, $message_list;
 		$query = $db->prepare('SELECT * from leaves_submissions where leave_id =:leave_id AND employee_afm=:employee_afm');
 		
@@ -186,7 +186,7 @@
 		return $query->fetchObject();	
 	}
 	
-	function get_employee_leave($leave_id){
+	function get_employee_leave($leave_id){ //Εμφάνιση άδειας βάσει ID άδειας
 		global $db, $user, $message_list;
 		
 		if(!get_user_is('director')) return;
@@ -199,7 +199,7 @@
 		return $query->fetchObject();	
 	}
 	
-	function get_employees(){
+	function get_employees(){ //Εμφάνιση υπαλλήλων βάσει ΑΦΜ
 		global $db, $user, $message_list;
 		if(!empty($user->unit_gd)){
 		
@@ -220,7 +220,7 @@
 		}
 	}
 	
-	function save_edit_application(){
+	function save_edit_application(){ //Αποθήκευση επεξεργασμένης αίτησης
 		global $db, $user, $message_list;
 		
 		if(!get_user_is('director')) return;
@@ -250,7 +250,7 @@
 		}
 	}
 	
-	function update_leave_days($leave_id){
+	function update_leave_days($leave_id){ //Ενημέρωση υπολοίπου ημερών άδειας
 		global $db, $user, $message_list;
 		
 		$leave= get_employee_leave($leave_id);
@@ -290,7 +290,7 @@
 		email_send($address, $receiver, $subject, $body, $full_path_filename);
 	}	
 	
-	function update_leave_on_production($leave_id){
+	function update_leave_on_production($leave_id){ //Ενημέρωση στοιχείων άδειας στον server παραγωγής
 		global $db, $user, $message_list;
 		
 		$leave= get_employee_leave($leave_id);

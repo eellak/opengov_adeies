@@ -1,6 +1,6 @@
 <div class="row">
 	<?php 
-		if(get_user_is('director')){  
+		if(get_user_is('director')){  //Εμφάνιση στατιστικών αδειών σε χρήστη με αυξημένα δικαιώματα
 		$count_new = 0;
 		$count_ready = 0;
 		$my_leaves =  get_my_employees_leaves();

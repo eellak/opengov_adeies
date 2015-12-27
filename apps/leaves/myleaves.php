@@ -26,7 +26,7 @@
 						</thead>
 						<tbody>
 						<?php 
-							$my_leaves =  get_my_leaves();
+							$my_leaves =  get_my_leaves(); //Φόρτωση αιτήσεων άδειας
 							foreach($my_leaves as $leave){
 								$class = 'info';
 								if($leave['signature_by'] != 0 and $leave['status'] == 1)  $class = 'success';
