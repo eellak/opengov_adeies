@@ -28,11 +28,12 @@
 								<input type="radio" name="leave_type" id="leave_type_regular" value="0" checked="checked">Κανονική
 							</label>
 						</div>
+						<?php /*
 						<div class="radio">
 							<label>
 								<input type="radio" name="leave_type" id="leave_type_scholar" value="1">Σχολική
 							</label>
-						</div>
+						</div> */ ?>
 						<?php if(get_user_is('director')){ //Αν ο χρήστης έχει αυξημένα δικαιώματα ?>
 							<div class="radio">
 								<label>

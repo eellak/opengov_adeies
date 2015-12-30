@@ -7,7 +7,7 @@
 
 <?php 
 	$leave = get_employee_leave(trim($_GET['id'])) ; //Αναζήτηση αίτησης άδειας βάσει id υφισταμένου
-	if(empty($leave)){ //Μήνυμα σφάλματος σε περίπτωση μή εύρεσης αίτησης ?> 
+	if(empty($leave)){ //Μήνυμα σφάλματος σε περίπτωση μή εύρεσης αίτησης ?>
 		<div class="row"><div class="col-sm-12"><div id="errorer" class="alert alert-danger">Η Αίτηση Δεν Εντοπίστηκε</div></div></div>
 <?php
 	} else{
@@ -19,7 +19,7 @@
 			$title = 'Η αίτηση εγκρίθηκε';
 			$class = 'success';
 		}
-		if($leave->signature_by != 0 and $leave->status == 0){  //Σε περίπτωση που είναι υπογεγραμμένη και έχει κατάσταση '0'
+		if($leave->signature_by != 0 and $leave->status == 0){   //Σε περίπτωση που είναι υπογεγραμμένη και έχει κατάσταση '0'
 			$title = 'Η αίτηση απορρίφθηκε';
 			$class = 'danger';
 		}

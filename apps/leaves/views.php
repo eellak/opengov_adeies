@@ -12,9 +12,7 @@
 		
 		if(get_user_is('director')){ //Αν ο χρήστης έχει αυξημένα δικαιώματα, προσθήκη επιπλέον επιλογών
 			$side_menu[] = array('url' => URL.'/?p=leaves|applications', 	'class' => 'fa fa-users fa-fw', 		'text' => 'Αιτήσεις Υπαλλήλων');
-			if($user->username == $application_list['leaves']['in_app_users']['statistics']){
-				$side_menu[] = array('url' => URL.'/?p=leaves|statistics', 	'class' => 'fa fa-bar-chart-o fa-fw', 	'text' => 'Στατιστικά Αδειών');
-			}
+			$side_menu[] = array('url' => URL.'/?p=leaves|statistics', 	'class' => 'fa fa-bar-chart-o fa-fw', 		'text' => 'Στατιστικά Αδειών');
 		}
 	}
 	
@@ -54,6 +52,9 @@
 				break;
 			case 'edit':		//Prepare the Edit Application Page
 				$js_files[] =  array('head' => false, 'path' => 'apps/leaves/js/edit_leave.js');
+				break;
+			case 'recall':		//Prepare the Recall Application Page
+				$js_files[] =  array('head' => false, 'path' => 'apps/leaves/js/recall_leave.js');
 				break;
 		}
 		

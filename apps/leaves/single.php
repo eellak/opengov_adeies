@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row">	
 	<div class="col-lg-12">
 		<h3 class="page-title">Η Αίτησή μου</h3>
 	</div>
@@ -24,6 +24,16 @@
 			$title = 'Η αίτηση απορρίφθηκε';
 			$class = 'danger';
 		}
+		
+		if($leave->canceled == 1){  
+			if($leave->canceled_by != ''){
+				$title = 'Ανακλήθηκαν '.$leave->canceled_days.' απο '.$leave->num_leaves.' ημέρες της άδειας.';
+				$class = 'warning';
+			}else{
+				$title = 'Η αίτηση ακυρώθηκε';
+				$class = 'warning';
+			}
+		}
 ?>
 	
 <div class="row">
@@ -43,7 +53,20 @@
 									<label class="<?php echo $class; ?>"><?php echo $title; ?></label>
 								</div>
 							<?php
-								if($leave->signature_by != 0){  ?>
+								if($leave->signature_by != 0){  
+									if($leave->canceled == 1){ ?>
+										<div class="form-group">
+											<label>Ανακλήθηκε απο</label>
+											<?php $user_leave_signed = get_leave_user($leave->canceled_by); ?>
+											<p class="form-control-static"><?php echo  $user_leave_signed->last_name.' '.$user_leave_signed->first_name; ?></p>
+										</div>
+										<div class="form-group">
+											<label>Ημερομηνία Επεξεργασίας</label>
+											<p class="form-control-static"><?php echo $leave->canceled_date; ?></p>
+									</div>
+								<?php
+									}else{
+								?>
 									<div class="form-group">
 										<label>Επεξεργάστηκε απο</label>
 										<?php $user_leave_signed = get_leave_user($leave->signature_by); ?>
@@ -53,8 +76,10 @@
 										<label>Ημερομηνία Επεξεργασίας</label>
 										<p class="form-control-static"><?php echo $leave->signature_date; ?></p>
 									</div>
-								<?php 
-									if($leave->status == 0){
+								<?php
+									}
+									
+									if($leave->status == 0 or $leave->canceled == 1){
 								?>
 									<div class="form-group">
 										<label>Σχόλιο</label>

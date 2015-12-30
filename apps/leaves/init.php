@@ -1,5 +1,8 @@
 <?php
-
+	
+	define('LEAVES_DEBUG_USER_NAME', 'Fotis Routsis');
+	define('LEAVES_DEBUG_USER_EMAIL', 'fotis.routsis@gmail.com');
+	
     //Επιλογή php αρχείων για εισαγωγή
 	require_once(ABSPATH.'apps/leaves/functions.php');
 	require_once(ABSPATH.'apps/leaves/views.php');

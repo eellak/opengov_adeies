@@ -3,7 +3,12 @@
 		<h3 class="page-title">Οι Αιτήσεις μου</h3>
 	</div>
 </div>
-
+ <?php 
+	if(isset($_GET['cancel'])){
+		save_cancel_application();
+		print_messages(); 
+	}
+?>
 <!-- /.row -->
 <div class="row">
 	<div class="col-lg-12">
@@ -28,16 +33,26 @@
 						<?php 
 							$my_leaves =  get_my_leaves(); //Φόρτωση αιτήσεων άδειας
 							foreach($my_leaves as $leave){
+								
 								$class = 'info';
 								if($leave['signature_by'] != 0 and $leave['status'] == 1)  $class = 'success';
 								if($leave['signature_by'] != 0 and $leave['status'] == 0)  $class = 'danger';
+								
+								//This is canceled..
+								if($leave['canceled'] == 1)  $class = 'warning';
+								
 								echo "<tr class='$class'>";
 								echo "<td>".$leave['date_submitted']."</td>";
 								echo "<td>".get_leave_type($leave)."</td>";
 								echo "<td>".$leave['num_leaves']."</td>";
 								echo "<td>".get_leave_status($leave)."</td>";
 								echo "<td><a href='".URL."/?p=leaves|single&id=".$leave['leave_id']."'><button type='button' class='btn btn-primary btn-circle'><i class='fa fa-eye'></i></button></a>&nbsp&nbsp";
-								echo '<a href="'.URL.'/apps/leaves/files/'.$leave['filename'].'"><button type="button" class="btn btn-success btn-circle"><i class="fa fa-link"></i></button></a></td>';
+								echo '<a href="'.URL.'/apps/leaves/files/'.$leave['filename'].'"><button type="button" class="btn btn-success btn-circle"><i class="fa fa-arrow-circle-down"></i></button></a>';
+								
+								if($class == 'info') // Not yer processed
+									echo "&nbsp&nbsp<a href='".URL."/?p=leaves|myleaves&cancel=".$leave['leave_id']."'><button type='button' class='btn btn-danger btn-circle'><i class='fa fa-close'></i></button></a>";
+									
+								echo '</td>';
 								echo '</tr>';
 							}
 						?>
