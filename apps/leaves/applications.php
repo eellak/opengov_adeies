@@ -58,7 +58,7 @@
 								
 								echo "<tr class='$class'>";
 								//Πίνακας με τα στοιχεία της άδειας
-								echo "<td>".$leave['date_submitted']."</td>";
+								echo "<td>".printDate($leave['date_submitted'])."</td>";
 								echo "<td>".$leave_user->last_name."</td>";
 								echo "<td>".$leave_user->first_name."</td>";
 								//Κλήση μεθόδου για αναζήτηση τύπου άδειας

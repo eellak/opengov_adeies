@@ -14,7 +14,7 @@
 	<div class="col-lg-12">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				Πίνακας Καταχωρημένων Αιτήσεων
+				Πίνακας Καταχωρημένων Αιτήσεων | Υπόλοιπο Ημερών Άδειας: <strong><?php echo get_remaining_leaves(); ?></strong>
 			</div>
 			<!-- /.panel-heading -->
 			<div class="panel-body">
@@ -42,7 +42,7 @@
 								if($leave['canceled'] == 1)  $class = 'warning';
 								
 								echo "<tr class='$class'>";
-								echo "<td>".$leave['date_submitted']."</td>";
+								echo "<td>".printDate($leave['date_submitted'])."</td>";
 								echo "<td>".get_leave_type($leave)."</td>";
 								echo "<td>".$leave['num_leaves']."</td>";
 								echo "<td>".get_leave_status($leave)."</td>";

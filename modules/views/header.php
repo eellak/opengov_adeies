@@ -31,7 +31,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="<?=URL?>">Περιφέρεια Δυτικής Μακεδονίας<?php print_title(); ?></a>
+                <a class="navbar-brand" href="<?=URL?>"><img src="<?=URL?>/assets/img/ethnosimo.png"/ class="toplogo" />Περιφέρεια Δυτικής Μακεδονίας<?php print_title(); ?></a>
             </div>
             <!-- /.navbar-header -->
 

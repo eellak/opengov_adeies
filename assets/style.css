@@ -1,3 +1,10 @@
 .page-title{
 	margin:0px 0px 30px 0px;
 }
+
+img.toplogo {
+    width: 50px;
+    float: left;
+    margin-right: 10px;
+    margin-top: -15px;
+}

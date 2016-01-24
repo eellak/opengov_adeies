@@ -385,6 +385,28 @@
 		return $query->fetchObject();	
 	}
 	
+	// Returns numbers for leaves more analytical
+	function get_analytics_data($leave_stats){
+		$details = array(
+			'current' => array($leave_stats->num_leaves, $leave_stats->num_leaves),
+			'past' => array($leave_stats->past_leaves, $leave_stats->past_leaves),
+		);
+		
+		$all_leaves = $leave_stats->num_leaves + $leave_stats->past_leaves;
+		if($all_leaves > $leave_stats->remaining_leaves){
+			$leave_diff = $all_leaves - $leave_stats->remaining_leaves;
+			
+			if($leave_diff > $leave_stats->past_leaves){ // He has already consumed his past leave days
+				$details['past'][0] = 0;
+				$details['current'][0] = $leave_stats->remaining_leaves;
+			} else{
+				$temp = $leave_stats->past_leaves -  $leave_diff;
+				$details['past'][0] = $temp;
+			}
+		}		
+		return $details;
+	}
+	
 	// Adds the Leave Record on the Live Production Database
 	function update_leave_on_production($leave){ //Ενημέρωση στοιχείων άδειας στον server παραγωγής
 		global $db, $message_list;

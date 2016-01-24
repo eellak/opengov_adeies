@@ -62,7 +62,7 @@
 										</div>
 										<div class="form-group">
 											<label>Ημερομηνία Επεξεργασίας</label>
-											<p class="form-control-static"><?php echo $leave->canceled_date; ?></p>
+											<p class="form-control-static"><?php echo printDate($leave->canceled_date); ?></p>
 									</div>
 								<?php
 									}else{
@@ -74,7 +74,7 @@
 									</div>
 									<div class="form-group">
 										<label>Ημερομηνία Επεξεργασίας</label>
-										<p class="form-control-static"><?php echo $leave->signature_date; ?></p>
+										<p class="form-control-static"><?php echo printDate($leave->signature_date); ?></p>
 									</div>
 								<?php
 									}
