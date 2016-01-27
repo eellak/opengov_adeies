@@ -77,10 +77,14 @@
 	*  -------------------------------------------------------------------------------------*/
 	function get_user_is($type){
 		global $user;
+		global $application_list ;
 		if(trim($type) == 'director'){
 			if(trim($user->type) == 'proist/nos_diefthyns') 	return true;
 			if(trim($user->type) == 'proist/nos_tmimatos') 		return true;
 			if(trim($user->type) == 'proist/nos_gen_dieft') 	return true;
+			
+			if(isset($application_list['leaves']['in_app_users']['overall']))
+				if(trim($user->username) == $application_list['leaves']['in_app_users']['overall']) 	return true;
 		}
 		return trim($user->type) == trim($type);
 	}

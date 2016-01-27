@@ -17,9 +17,9 @@
 
 	function initiate(){
 		include(ABSPATH.'applist.php');
-		load_applications($all_apps);			// Load App List for the User
 		set_connection();						// Start the Database Connection
 		get_user_details();						// Get the User Record from the DB
+		load_applications($all_apps);			// Load App List for the User
 		initiate_email();
 	}
 	

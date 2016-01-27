@@ -16,18 +16,17 @@
 	*	Checks if User is Eligible for specific App
 	*  -------------------------------------------------------------------------------------*/
 	function can_user_use_app($app){
+		global $user;
 		
 		if(!$app['active']) return false;
 		
-		if(!$app['user_specific']){
+		if($app['user_specific']){
+			if(in_array($user->username, $app['users'])) return true;
+			else return false;
+		} 
 		
-			if($app['user_group'] == 'all') return true;
-			
-			// TODO: Here Check Group Related Details
-		} else{
-			// TODO: Here Check User Related Details
-		}
-		
+		return true;
 	}
+	
 	
 ?>

@@ -9,3 +9,13 @@
 .form-group label.success {
 	color: green;
 }
+
+#statform {
+    padding: 20px;
+    float: left;
+    width: 100%;
+    margin-bottom: 40px;
+    background: #f8f8f8;
+    border-radius: 5px;
+    border: 1px solid #cacaca;
+}

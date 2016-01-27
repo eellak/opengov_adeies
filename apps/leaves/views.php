@@ -6,9 +6,13 @@
 		global $side_menu;
 		$side_menu = array( //Φόρτωση βασικών επιλγών sidebar
 			array('url' => URL.'/?p=leaves|home', 			'class' => 'fa fa-home fa-fw', 			'text' => 'Εφαρμογή Αδειών'),
-			array('url' => URL.'/?p=leaves|new', 			'class' => 'fa fa-edit fa-fw', 			'text' => 'Νέα Αίτηση'),
-			array('url' => URL.'/?p=leaves|myleaves', 		'class' => 'fa fa-file-word-o fa-fw', 	'text' => 'Οι Αιτήσεις μου'),
 		);
+		
+		// Below add app specific details
+		if($application_list['leaves']['in_app_users']['overall'] != $user->username){	
+			$side_menu[] = array('url' => URL.'/?p=leaves|new', 			'class' => 'fa fa-edit fa-fw', 			'text' => 'Νέα Αίτηση');
+			$side_menu[] = array('url' => URL.'/?p=leaves|myleaves', 		'class' => 'fa fa-file-word-o fa-fw', 	'text' => 'Οι Αιτήσεις μου');
+		}
 		
 		if(get_user_is('director')){ //Αν ο χρήστης έχει αυξημένα δικαιώματα, προσθήκη επιπλέον επιλογών
 			$side_menu[] = array('url' => URL.'/?p=leaves|applications', 	'class' => 'fa fa-users fa-fw', 		'text' => 'Αιτήσεις Υπαλλήλων');
@@ -55,6 +59,11 @@
 				break;
 			case 'recall':		//Prepare the Recall Application Page
 				$js_files[] =  array('head' => false, 'path' => 'apps/leaves/js/recall_leave.js');
+				break;
+			case 'statistics':			//Prepare the New Application Page
+				$css_files[] = array('path' => 'assets/lib/bootstrap-datepicker/css/datepicker.css');
+				$js_files[] =  array('head' => false, 'path' => 'assets/lib/bootstrap-datepicker/js/bootstrap-datepicker.js');
+				$js_files[] =  array('head' => false, 'path' => 'apps/leaves/js/statistics_form.js');
 				break;
 		}
 		

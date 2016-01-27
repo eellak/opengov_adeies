@@ -1,5 +1,7 @@
 <div class="row">
 	<?php 
+		global $user, $application_list;
+		
 		if(get_user_is('director')){  //Εμφάνιση στατιστικών αδειών σε χρήστη με αυξημένα δικαιώματα
 		$count_new = 0;
 		$count_ready = 0;
@@ -42,6 +44,7 @@
 			</div>
 		</div>
 	<?php } ?>
+	<?php if(trim($user->username) != $application_list['leaves']['in_app_users']['overall']){ ?>
 	<div class="col-lg-3 col-md-6">
 		<div class="panel panel-info">
 			<div class="panel-heading">
@@ -57,6 +60,7 @@
 			</div>
 		</div>
 	</div>
+	<?php } ?>
 </div>
 
 <div class="panel panel-primary">

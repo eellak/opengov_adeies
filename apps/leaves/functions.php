@@ -77,10 +77,10 @@
 				$pdf_body = '<h4>Αίτηση Άδειας</h4>';
 				$pdf_body .= '<p>Όνομα: '.$leave_user->first_name.'</p>';
 				$pdf_body .= '<p>Επίθετο: '.$leave_user->last_name.'</p>';
-				$pdf_body .= '<p>Ημερομηνία Έναρξης Άδειας: '.trim($_POST['date_starts']).'</p>';
-				$pdf_body .= '<p>Ημερομηνία Λήξης Άδειας: '.trim($_POST['date_ends']).'</p>';
+				$pdf_body .= '<p>Ημερομηνία Έναρξης Άδειας: '. printDate(trim($_POST['date_starts'])).'</p>';
+				$pdf_body .= '<p>Ημερομηνία Λήξης Άδειας: '. printDate(trim($_POST['date_ends'])).'</p>';
 				$pdf_body .= '<p>Ημέρες Άδειας: '.trim($_POST['num_leaves']).'</p>';
-				$pdf_body .= '<p>Ημέρομηνία Υποβολής: '.$submission_date.'</p>';
+				$pdf_body .= '<p>Ημέρομηνία Υποβολής: '. printDate($submission_date).'</p>';
 				
 				// Also print the pdf
 				$full_path_filename = getcwd().'/apps/leaves/files/'.$filename;
@@ -91,12 +91,16 @@
 					$receiver	= LEAVES_DEBUG_USER_NAME;
 					$subject 	= 'Η Αίτηση Αδείας σας υποβλήθηκε επιτυχώς'; 
 					$body 		= '<p>Η Αίτηση Αδείας σας υποβλήθηκε επιτυχώς</p>';
+					$body 		.= '<p>Επισυνάπτεται αντίγραφο της αίτησή σας.</p>';
+					$body 		.= '<p>Θα ενημερωθείτε με νεώτερο email μετά το πέρας της επεξεργασίας της αίτησής σας.</p>';
 				} else {
 					// Send email to the employer
 					$address 	= $leave_user->email;
 					$receiver	= $leave_user->first_name.' '.$leave_user->last_name;
 					$subject 	= 'Η Αίτηση Αδείας σας υποβλήθηκε επιτυχώς'; 
 					$body 		= '<p>Η Αίτηση Αδείας σας υποβλήθηκε επιτυχώς</p>';
+					$body 		.= '<p>Επισυνάπτεται αντίγραφο της αίτησή σας.</p>';
+					$body 		.= '<p>Θα ενημερωθείτε με νεώτερο email μετά το πέρας της επεξεργασίας της αίτησής σας.</p>';
 					
 					if(trim($_POST['leave_type']) != 2){ 
 						// TODO: Also send email to the Supervisor
@@ -167,7 +171,8 @@
 	}
 	
 	function get_my_employees_leaves(){ //Εμφάνιση αιτήσεων άδειας των υφισταμένων ενός χρήστη
-		global $db, $user, $message_list;
+		global $db, $user, $message_list, $application_list;
+		
 		if(!empty($user->unit_gd)){
 		
 			if($user->type == 'proist/nos_diefthyns'){
@@ -190,6 +195,18 @@
 				$all_leaves = array_merge($cur_leaves, $all_leaves);
 			}
 			return $all_leaves; 
+		} else { // This is someone else.. The Overall Administrator
+			 if(trim($user->username) == $application_list['leaves']['in_app_users']['overall']){
+				$query = $db->prepare('SELECT * FROM `main_users` ORDER BY  last_name ASC' );
+				$query->execute();
+				$employees = $query->fetchAll();	
+				$all_leaves = array();
+				foreach($employees as $employee){
+					$cur_leaves = get_my_leaves($employee['afm']);
+					$all_leaves = array_merge($cur_leaves, $all_leaves);
+				}
+				return $all_leaves; 
+			 }
 		}
 	}
 	
@@ -235,7 +252,7 @@
 	}
 	
 	function get_employees(){ //Εμφάνιση υπαλλήλων βάσει ΑΦΜ
-		global $db, $user, $message_list;
+		global $db, $user, $message_list, $application_list;
 		if(!empty($user->unit_gd)){
 		
 			if($user->type == 'proist/nos_gen_dieft'){
@@ -253,6 +270,12 @@
 			$query->execute();
 			//echo $query->getSQL();
 			return $query->fetchAll();	
+		} else {
+			if(trim($user->username) == $application_list['leaves']['in_app_users']['overall']){
+				$query = $db->prepare('SELECT * FROM `main_users` ORDER BY  last_name ASC' );
+				$query->execute();
+				return $query->fetchAll();	
+			 }
 		}
 	}
 	
@@ -276,8 +299,8 @@
 		$query->execute();
 		if ($query->rowCount() != 0) {
 			$message_list[] = array( 'type' => 'success', 'message'	=> 'Η Αίτηση αποθηκεύτηκε επιτυχώς..' );
+			update_leave_days(trim($_POST['leave_id'])); 			// Remove the remaining days
 			if(trim($_POST['approve_type']) == 1){
-				update_leave_days(trim($_POST['leave_id'])); 			// Remove the remaining days
 				update_leave_on_production(trim($_POST['leave_id']));	// Pass the variables for the leave on the production server of the employers database
 			}
 			
@@ -329,7 +352,11 @@
 
 		$subject 	= 'Η Αδεία σας Ανακλήθηκε'; 
 		$body 		= '<p>Η Αδεία σας Ανακλήθηκε.</p>';
-		$body 		= '<p>Ανακλήθηκαν '.$leave->canceled_days.' από τις '.$leave->num_leaves.' μέρες.</p>';
+		$body 		.= '<p>Ανακλήθηκαν '.$leave->canceled_days.' από τις '.$leave->num_leaves.' μέρες.</p>';
+		$body 		.= '<p>Αφορά την άδεια με τα παρακάτω στοιχεία: </p>';
+		$body 		.= '<p>- Ημέρομηνία Υποβολής: '. printDate($leave->date_submitted).'</p>';
+		$body 		.= '<p>- Ημερομηνία Έναρξης Άδειας: '. printDate($leave->date_starts).'</p>';
+		$body 		.= '<p>- Ημερομηνία Λήξης Άδειας: '. printDate($leave->date_ends).'</p>';
 		
 		if(DEBUG){ // This is in development mode..
 			$address 	= LEAVES_DEBUG_USER_EMAIL;
@@ -359,11 +386,22 @@
 		if($leave->signature_by != 0 and $leave->status == 1){
 			$subject 	= 'Η Αίτηση Αδείας σας Εγκρίθηκε'; 
 			$body 		= '<p>Η Αίτηση Αδείας σας Εγκρίθηκε</p>';
+			$body 		.= '<p>Αφορά την άδεια με τα παρακάτω στοιχεία: </p>';
+			$body 		.= '<p>- Ημέρομηνία Υποβολής: '. printDate($leave->date_submitted).'</p>';
+			$body 		.= '<p>- Ημέρες Αδείας: '.$leave->num_leaves.'</p>';
+			$body 		.= '<p>- Ημερομηνία Έναρξης Άδειας: '. printDate($leave->date_starts).'</p>';
+			$body 		.= '<p>- Ημερομηνία Λήξης Άδειας: '. printDate($leave->date_ends).'</p>';
 		}
 		
 		if($leave->signature_by != 0 and $leave->status == 0){
 			$subject 	= 'Η Αίτηση Αδείας σας Απορρίφθηκε'; 
 			$body 		= '<p>Η Αίτηση Αδείας σας Απορρίφθηκε</p>';
+			$body 		.= '<p>Αφορά την άδεια με τα παρακάτω στοιχεία: </p>';
+			$body 		.= '<p>- Ημέρομηνία Υποβολής: '. printDate($leave->date_submitted).'</p>';
+			$body 		.= '<p>- Ημέρες Αδείας: '.$leave->num_leaves.'</p>';
+			$body 		.= '<p>- Ημερομηνία Έναρξης Άδειας: '. printDate($leave->date_starts).'</p>';
+			$body 		.= '<p>- Ημερομηνία Λήξης Άδειας: '. printDate($leave->date_ends).'</p>';
+			$body 		.= '<p>Λόγος Απόρριψης: '. $leave->comments.'</p>';
 		}
 		
 		if(DEBUG){ // This is in development mode..
@@ -429,5 +467,5 @@
 		$db_data = simplexml_load_file(WSO2WEB.'/services/pdm_leaves.SecureHTTPEndpoint/insertleaves4/all?'.implode('&', $data).''); 
 		*/
 	}
-	
+
 ?>
