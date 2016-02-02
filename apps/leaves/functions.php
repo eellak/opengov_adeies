@@ -374,14 +374,6 @@
 		
 		$leave = get_employee_leave($leave_id);	
 		$leave_user = get_user_by_leave($leave);	
-		
-		$remaining_leaves = intval(get_remaining_leaves_for_user($leave_user->id));
-		$remaining_leaves = $remaining_leaves - $leave->num_leaves;
-		
-		$query = $db->prepare('UPDATE leaves set remaining_leaves=:remaining_leaves where id =:id');
-		$query->bindValue(':remaining_leaves', 	$remaining_leaves,		PDO::PARAM_INT); 
-		$query->bindValue(':id', 				$leave_user->id,		PDO::PARAM_INT); 
-		$query->execute();
 
 		if($leave->signature_by != 0 and $leave->status == 1){
 			$subject 	= 'Η Αίτηση Αδείας σας Εγκρίθηκε'; 
@@ -391,6 +383,15 @@
 			$body 		.= '<p>- Ημέρες Αδείας: '.$leave->num_leaves.'</p>';
 			$body 		.= '<p>- Ημερομηνία Έναρξης Άδειας: '. printDate($leave->date_starts).'</p>';
 			$body 		.= '<p>- Ημερομηνία Λήξης Άδειας: '. printDate($leave->date_ends).'</p>';
+			
+			$remaining_leaves = intval(get_remaining_leaves_for_user($leave_user->id));
+			$remaining_leaves = $remaining_leaves - $leave->num_leaves;
+			
+			$query = $db->prepare('UPDATE leaves set remaining_leaves=:remaining_leaves where id =:id');
+			$query->bindValue(':remaining_leaves', 	$remaining_leaves,		PDO::PARAM_INT); 
+			$query->bindValue(':id', 				$leave_user->id,		PDO::PARAM_INT); 
+			$query->execute();
+		
 		}
 		
 		if($leave->signature_by != 0 and $leave->status == 0){
