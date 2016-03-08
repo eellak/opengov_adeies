@@ -51,10 +51,11 @@
 								<?php 
 									$employees = get_employees(); //Φόρτωση υφισταμένων
 									foreach($employees as $employee){
-										echo '<option value="'.$employee['afm'].'">'.$employee['last_name'].' '.$employee['first_name'].'</option>';
+										echo '<option value="'.$employee['afm'].'" rel="'.get_remaining_leaves_for_user($employee['id']).'">'.$employee['last_name'].' '.$employee['first_name'].'</option>';
 									}
 								?>
 								</select>
+								<div id="showremaining"></div>
 						<?php } ?>
 					</div>
 				</div>

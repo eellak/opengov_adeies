@@ -45,4 +45,18 @@ $(document).ready(function(){
 			e.preventDefault();
 	});
 	
+	$('#leaveform input').on('change', function() {
+		if($('input[name=leave_type]:checked', '#leaveform').val() != 2){
+			$('#showremaining').html();
+		} else{
+			var remaining = $('option:selected', $("#user_tel")).attr('rel');
+			$('#showremaining').html('Υπόλοιπο αδειών <strong>'+remaining+'</strong>');
+		}
+	});
+	
+	 $("#user_tel").change(function(){ 
+		var remaining = $('option:selected', this).attr('rel');
+		$('#showremaining').html('Υπόλοιπο αδειών <strong>'+remaining+'</strong>');
+    }); 
+	
 });

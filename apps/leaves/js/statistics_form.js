@@ -6,6 +6,34 @@ $(document).ready(function(){
 	$('#dpd1').datepicker({	format: 'yyyy-mm-dd' });
 	$('#dpd2').datepicker({	format: 'yyyy-mm-dd' });
 	
+	$('#stattype').on('change', function() {
+		var stattype = $(this).val();
+		var since = $('#since');
+		var unitll = $('#untill');
+		var employeelist = $('#employeelist');
+		if( stattype == 'all'){
+			since.fadeOut();
+			unitll.fadeOut();
+			employeelist.fadeOut();
+		}
+		if( stattype == 'day'){
+			since.fadeIn();
+			unitll.fadeOut();
+			employeelist.fadeOut();
+		}
+		if( stattype == 'period'){
+			since.fadeIn();
+			unitll.fadeIn();
+			employeelist.fadeOut();
+		}
+		if( stattype == 'single'){
+			since.fadeIn();
+			unitll.fadeIn();
+			employeelist.fadeIn();
+		}
+	});
+	
+	/*
 		var checkin = $('#dpd1').datepicker({
 		  onRender: function(date) {
 			return date.valueOf() < now.valueOf() ? 'disabled' : '';
@@ -28,7 +56,7 @@ $(document).ready(function(){
 			checkout.hide();
 		}).data('datepicker');
 	
-	/*
+	
 	$('#statform').submit(function(e){;
 		
 		var errored = $('#errorer');

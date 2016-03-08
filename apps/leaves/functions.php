@@ -89,24 +89,43 @@
 				if(DEBUG){ // This is in development mode..
 					$address 	= LEAVES_DEBUG_USER_EMAIL;
 					$receiver	= LEAVES_DEBUG_USER_NAME;
-					$subject 	= 'Η Αίτηση Αδείας σας υποβλήθηκε επιτυχώς'; 
-					$body 		= '<p>Η Αίτηση Αδείας σας υποβλήθηκε επιτυχώς</p>';
-					$body 		.= '<p>Επισυνάπτεται αντίγραφο της αίτησή σας.</p>';
-					$body 		.= '<p>Θα ενημερωθείτε με νεώτερο email μετά το πέρας της επεξεργασίας της αίτησής σας.</p>';
-				} else {
-					// Send email to the employer
+				} else {	// Send email to the employer
 					$address 	= $leave_user->email;
 					$receiver	= $leave_user->first_name.' '.$leave_user->last_name;
-					$subject 	= 'Η Αίτηση Αδείας σας υποβλήθηκε επιτυχώς'; 
-					$body 		= '<p>Η Αίτηση Αδείας σας υποβλήθηκε επιτυχώς</p>';
-					$body 		.= '<p>Επισυνάπτεται αντίγραφο της αίτησή σας.</p>';
-					$body 		.= '<p>Θα ενημερωθείτε με νεώτερο email μετά το πέρας της επεξεργασίας της αίτησής σας.</p>';
+				}
+				
+				$subject 	= 'Η Αίτηση Αδείας σας υποβλήθηκε επιτυχώς'; 
+				$body 		= '<p>Η Αίτηση Αδείας σας υποβλήθηκε επιτυχώς</p>';
+				$body 		.= '<p>Επισυνάπτεται αντίγραφο της αίτησή σας.</p>';
+				$body 		.= '<p>Θα ενημερωθείτε με νεώτερο email μετά το πέρας της επεξεργασίας της αίτησής σας.</p>';
+				
+				email_send($address, $receiver, $subject, $body, $full_path_filename);
+				
+				if(trim($_POST['leave_type']) != 2){ // If it is by telephone no need to alert the supervisors
+					// Maybe send this no matter what..?
+					$supervisors = get_user_supervisors($leave_user);
+					foreach($supervisors as $supervisor){
 					
-					if(trim($_POST['leave_type']) != 2){ 
-						// TODO: Also send email to the Supervisor
+						if(DEBUG){ // This is in development mode..
+							$address 	= LEAVES_DEBUG_USER_EMAIL;
+							$receiver	= LEAVES_DEBUG_USER_NAME;
+						} else {	// Send email to the supervisor
+							$address 	= $supervisor['email'];
+							$receiver	= $supervisor['first_name'].' '.$supervisor['last_name'];
+						}
+						
+						if(DEBUG)
+							$message_list[] = array( 'type' => 'message', 'message'	=> 'Ενημερώθηκε ηλεκτρονικά ο '.$supervisor['first_name'].' '.$supervisor['last_name'] );
+							
+						$subject 	= 'Νέα Αίτηση Αδείας απο τον '.$leave_user->first_name.' '.$leave_user->last_name; 
+						$body 		= '<p>O '.$leave_user->first_name.' '.$leave_user->last_name.' υπέβαλλε νέα αίτηση αδείας.</p>';
+						$body 		.= '<p>Συνδεθείτε για να επεξεργαστείτε την αίτηση.</p>';
+						$body 		.= '<p><a href="'.URL.'?p=leaves|applications">'.URL.'</a></p>';
+						
+						email_send($address, $receiver, $subject, $body);
 					}
 				}
-				email_send($address, $receiver, $subject, $body, $full_path_filename);
+				
 				$message_list[] = array( 'type' => 'success', 'message'	=> 'Η Αίτηση καταχωρήθηκε επιτυχώς..' );
 				
 			}else
@@ -424,6 +443,25 @@
 		return $query->fetchObject();	
 	}
 	
+	function get_user_supervisors($user){ 
+		global $db;
+		
+		$super_roles = array(
+			'proist/nos_gen_dieft',
+			'proist/nos_diefthyns', 
+			//'proist/nos_tmimatos'
+		);
+		
+		$query = $db->prepare("SELECT * from main_users where type in ('".implode("','", $super_roles)."') and unit_g = :unit_g and unit_gd = :unit_gd");
+		$query->bindValue(':unit_gd', 		$user->unit_gd, 					PDO::PARAM_STR); 	
+		$query->bindValue(':unit_g', 		$user->unit_g, 					PDO::PARAM_STR); 			
+		$query->execute();
+		//echo $query->getSQL(); //For debug
+		return $query->fetchAll();	
+	}
+	
+	
+	
 	// Returns numbers for leaves more analytical
 	function get_analytics_data($leave_stats){
 		$details = array(
@@ -444,6 +482,20 @@
 			}
 		}		
 		return $details;
+	}
+	
+	function user_is_manager($type){
+		global $user;
+		global $application_list ;
+		if(trim($type) == 'manager'){
+			if(trim($user->type) == 'proist/nos_diefthyns') 	return true;
+			if(trim($user->type) == 'proist/nos_tmimatos') 		return false;
+			if(trim($user->type) == 'proist/nos_gen_dieft') 	return true;
+			
+			if(isset($application_list['leaves']['in_app_users']['overall']))
+				if(trim($user->username) == $application_list['leaves']['in_app_users']['overall']) 	return true;
+		}
+		return trim($user->type) == trim($type);
 	}
 	
 	// Adds the Leave Record on the Live Production Database
