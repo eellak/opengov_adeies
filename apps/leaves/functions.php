@@ -439,21 +439,23 @@
 		
 		global $db, $message_list;
 		
-		$query_l = $db->prepare('UPDATE leaves set num_leaves=:num_leaves, past_leaves= :past_leaves, remaining_leaves = :remaining_leaves where id =:id');
-		
-		$remaining_leaves = intval(trim($_POST['num_leaves'])) + intval(trim($_POST['past_leaves']));
-		
-		$query_l->bindValue(':id', 					trim($_POST['user_list']), 			PDO::PARAM_INT);
-		$query_l->bindValue(':num_leaves', 			trim($_POST['num_leaves']), 	PDO::PARAM_INT);
-		$query_l->bindValue(':past_leaves', 		trim($_POST['past_leaves']), 	PDO::PARAM_INT);
-		$query_l->bindValue(':remaining_leaves', 	$remaining_leaves, 				PDO::PARAM_INT);
-		$query_l->execute();
-		
-		if ($query_l->rowCount() != 0) {
-			$message_list[] = array( 'type' => 'success', 'message'	=> 'Οι ημέρες ενημερώθηκαν επιτυχώς..' );
-		}else{
-			$message_list[] = array( 'type' => 'danger', 'message'	=> 'Σφάλμα! Πρόβλημα κατα την ενημέρωση!' );
-		} 
+		if(isset($_POST['num_leaves'])){
+			$query_l = $db->prepare('UPDATE leaves set num_leaves=:num_leaves, past_leaves= :past_leaves, remaining_leaves = :remaining_leaves where id =:id');
+			
+			$remaining_leaves = intval(trim($_POST['num_leaves'])) + intval(trim($_POST['past_leaves']));
+			
+			$query_l->bindValue(':id', 					trim($_POST['user_list']), 			PDO::PARAM_INT);
+			$query_l->bindValue(':num_leaves', 			trim($_POST['num_leaves']), 	PDO::PARAM_INT);
+			$query_l->bindValue(':past_leaves', 		trim($_POST['past_leaves']), 	PDO::PARAM_INT);
+			$query_l->bindValue(':remaining_leaves', 	$remaining_leaves, 				PDO::PARAM_INT);
+			$query_l->execute();
+			
+			if ($query_l->rowCount() != 0) {
+				$message_list[] = array( 'type' => 'success', 'message'	=> 'Οι ημέρες ενημερώθηκαν επιτυχώς..' );
+			}else{
+				$message_list[] = array( 'type' => 'danger', 'message'	=> 'Σφάλμα! Πρόβλημα κατα την ενημέρωση!' );
+			} 
+		}
 	}
 	
 	// Given a Leave Object returns the User Object for that Leave
