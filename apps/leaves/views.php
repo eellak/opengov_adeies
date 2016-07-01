@@ -60,6 +60,9 @@
 			case 'edit':		//Prepare the Edit Application Page
 				$js_files[] =  array('head' => false, 'path' => 'apps/leaves/js/edit_leave.js');
 				break;
+			case 'manage':		//Prepare the Manage Leaves Days Page
+				$js_files[] =  array('head' => false, 'path' => 'apps/leaves/js/manage_days.js');
+				break;
 			case 'recall':		//Prepare the Recall Application Page
 				$js_files[] =  array('head' => false, 'path' => 'apps/leaves/js/recall_leave.js');
 				break;
