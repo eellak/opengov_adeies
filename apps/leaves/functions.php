@@ -195,13 +195,13 @@
 		if(!empty($user->unit_gd)){
 		
 			if($user->type == 'proist/nos_diefthyns'){
-				$query = $db->prepare('SELECT * FROM `main_users` where unit_gd = :unit_gd AND afm !=:afm ORDER BY  last_name ASC' );
+				$query = $db->prepare('SELECT * FROM `main_users` where unit_gd = :unit_gd AND afm !=:afm and active=1 ORDER BY  last_name ASC' );
 				$query->bindValue(':unit_gd', 	$user->unit_gd,				PDO::PARAM_STR); 
 			}elseif($user->type == 'proist/nos_gen_dieft'){
-				$query = $db->prepare('SELECT * FROM `main_users` where unit_g = :unit_g AND afm !=:afm ORDER BY  last_name ASC' );
+				$query = $db->prepare('SELECT * FROM `main_users` where unit_g = :unit_g AND afm !=:afm and active=1 ORDER BY  last_name ASC' );
 				$query->bindValue(':unit_g', 	$user->unit_g,				PDO::PARAM_STR); 
 			}else{ //proist/nos_tmimatos
-				$query = $db->prepare('SELECT * FROM `main_users` where unit_g = :unit_g AND afm !=:afm AND type NOT IN (\'proist/nos_diefthyns\', \'proist/nos_gen_dieft\') ORDER BY  last_name ASC' );
+				$query = $db->prepare('SELECT * FROM `main_users` where unit_g = :unit_g AND afm !=:afm AND type NOT IN (\'proist/nos_diefthyns\', \'proist/nos_gen_dieft\') and active=1 ORDER BY  last_name ASC' );
 				$query->bindValue(':unit_g', 	$user->unit_g,				PDO::PARAM_STR); 
 			}
 			
@@ -216,7 +216,7 @@
 			return $all_leaves; 
 		} else { // This is someone else.. The Overall Administrator
 			 if(trim($user->username) == $application_list['leaves']['in_app_users']['overall']){
-				$query = $db->prepare('SELECT * FROM `main_users` ORDER BY  last_name ASC' );
+				$query = $db->prepare('SELECT * FROM `main_users` where active=1 ORDER BY  last_name ASC' );
 				$query->execute();
 				$employees = $query->fetchAll();	
 				$all_leaves = array();
@@ -231,7 +231,7 @@
 	
 	function get_leave_user($employee_afm){ //Εμφάνιση χρήστη βάσει ΑΦΜ
 		global $db;
-		$query = $db->prepare('SELECT * from main_users where afm =:afm ');
+		$query = $db->prepare('SELECT * from main_users where afm =:afm and active=1');
 		
 		$query->bindValue(':afm', 			$employee_afm, 				PDO::PARAM_STR); 			
 		$query->execute();
@@ -275,13 +275,13 @@
 		if(!empty($user->unit_gd)){
 		
 			if($user->type == 'proist/nos_gen_dieft'){
-				$query = $db->prepare('SELECT * FROM `main_users` where unit_gd = :unit_gd AND afm !=:afm ORDER BY  last_name ASC' );
+				$query = $db->prepare('SELECT * FROM `main_users` where unit_gd = :unit_gd AND afm !=:afm and active=1 ORDER BY  last_name ASC' );
 				$query->bindValue(':unit_gd', 	$user->unit_gd,				PDO::PARAM_STR); 
 			}elseif($user->type == 'proist/nos_diefthyns'){
-				$query = $db->prepare('SELECT * FROM `main_users` where unit_g = :unit_g AND afm !=:afm ORDER BY  last_name ASC' );
+				$query = $db->prepare('SELECT * FROM `main_users` where unit_g = :unit_g AND afm !=:afm and active=1 ORDER BY  last_name ASC' );
 				$query->bindValue(':unit_g', 	$user->unit_g,				PDO::PARAM_STR); 
 			}else{ //proist/nos_tmimatos
-				$query = $db->prepare('SELECT * FROM `main_users` where unit_g = :unit_g AND afm !=:afm AND type NOT IN (\'proist/nos_diefthyns\', \'proist/nos_gen_dieft\') ORDER BY  last_name ASC' );
+				$query = $db->prepare('SELECT * FROM `main_users` where unit_g = :unit_g AND afm !=:afm AND type NOT IN (\'proist/nos_diefthyns\', \'proist/nos_gen_dieft\') and active=1 ORDER BY  last_name ASC' );
 				$query->bindValue(':unit_g', 	$user->unit_g,				PDO::PARAM_STR); 
 			}
 			
@@ -291,7 +291,7 @@
 			return $query->fetchAll();	
 		} else {
 			if(trim($user->username) == $application_list['leaves']['in_app_users']['overall']){
-				$query = $db->prepare('SELECT * FROM `main_users` ORDER BY  last_name ASC' );
+				$query = $db->prepare('SELECT * FROM `main_users` where active=1 ORDER BY  last_name ASC' );
 				$query->execute();
 				return $query->fetchAll();	
 			 }
@@ -461,7 +461,7 @@
 	// Given a Leave Object returns the User Object for that Leave
 	function get_user_by_leave($leave){ 
 		global $db;
-		$query = $db->prepare('SELECT * from main_users where afm=:afm');
+		$query = $db->prepare('SELECT * from main_users where afm=:afm and active=1');
 		$query->bindValue(':afm', 		$leave->employee_afm, 					PDO::PARAM_STR); 			
 		$query->execute();
 		return $query->fetchObject();	
@@ -476,7 +476,7 @@
 			//'proist/nos_tmimatos'
 		);
 		
-		$query = $db->prepare("SELECT * from main_users where type in ('".implode("','", $super_roles)."') and unit_g = :unit_g and unit_gd = :unit_gd");
+		$query = $db->prepare("SELECT * from main_users where type in ('".implode("','", $super_roles)."') and unit_g = :unit_g and unit_gd = :unit_gd and active=1 ");
 		$query->bindValue(':unit_gd', 		$user->unit_gd, 					PDO::PARAM_STR); 	
 		$query->bindValue(':unit_g', 		$user->unit_g, 					PDO::PARAM_STR); 			
 		$query->execute();
