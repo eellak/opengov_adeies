@@ -62,13 +62,13 @@
 				<div class="col-md-3">
 					<div class="form-group">
 						<label>Ημερομηνία Έναρξης</label>
-					   <input class="form-control required" name="date_starts" id="dpd1" size="16" type="text" value="ΕΕΕΕ/ΜΜ/ΗΗ"/>
+					   <input class="form-control required" name="date_starts" id="dpd1" size="16" type="text" value="ΕΕΕΕ-ΜΜ-ΗΗ"/>
 					</div> 
 				</div> 
 				<div class="col-md-3">
 					<div class="form-group">
 						<label>Ημερομηνία Λήξης</label>
-						<input class="form-control required" name="date_ends" id="dpd2" size="16" type="text" value="ΕΕΕΕ/ΜΜ/ΗΗ"/>
+						<input class="form-control required" name="date_ends" id="dpd2" size="16" type="text" value="ΕΕΕΕ-ΜΜ-ΗΗ"/>
 					</div>  
 				</div>  
 			</div> 

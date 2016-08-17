@@ -12,14 +12,16 @@
 		if($application_list['leaves']['in_app_users']['overall'] != $user->username){	
 			$side_menu[] = array('url' => URL.'/?p=leaves|new', 			'class' => 'fa fa-edit fa-fw', 			'text' => 'Νέα Αίτηση');
 			$side_menu[] = array('url' => URL.'/?p=leaves|myleaves', 		'class' => 'fa fa-file-word-o fa-fw', 	'text' => 'Οι Αιτήσεις μου');
-		}
+
+			}
 		
 		if(get_user_is('director')){ //Αν ο χρήστης έχει αυξημένα δικαιώματα, προσθήκη επιπλέον επιλογών
 			$side_menu[] = array('url' => URL.'/?p=leaves|applications', 	'class' => 'fa fa-users fa-fw', 		'text' => 'Αιτήσεις Υπαλλήλων');
 			$side_menu[] = array('url' => URL.'/?p=leaves|statistics', 	'class' => 'fa fa-bar-chart-o fa-fw', 		'text' => 'Στατιστικά Αδειών');
-			if(user_is_manager('manager'))
+			if(user_is_manager('manager')) {
 				$side_menu[] = array('url' => URL.'/?p=leaves|manage', 	'class' => 'fa fa-calendar-o fa-fw', 		'text' => 'Διαχείριση Ημερών');
-		
+				$side_menu[] = array('url' => URL.'/?p=leaves|OrismosAntikatastati', 	'class' => 'fa fa-calendar-o fa-fw', 		'text' =>'Ορισμός Αντικαταστάτη Προϊστάμενου');		
+			}
 		}
 	}
 	
@@ -43,8 +45,11 @@
 		
 		switch($page){	
 			case 'new':			//Prepare the New Application Page
-				$css_files[] = array('path' => 'assets/lib/bootstrap-datepicker/css/datepicker.css');
-				$js_files[] =  array('head' => false, 'path' => 'assets/lib/bootstrap-datepicker/js/bootstrap-datepicker.js');
+				//$css_files[] = array('path' => 'assets/lib/bootstrap-datepicker/css/datepicker.css');
+				//$js_files[] =  array('head' => false, 'path' => 'assets/lib/bootstrap-datepicker/js/bootstrap-datepicker.js');
+				$css_files[] = array('path' => 'assets/lib/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css');
+				$js_files[] =  array('head' => false, 'path' => 'assets/lib/bootstrap-datetimepicker/moment.min.js');
+				$js_files[] =  array('head' => false, 'path' => 'assets/lib/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js');
 				$js_files[] =  array('head' => false, 'path' => 'apps/leaves/js/new_form.js');
 				break;
 			case 'myleaves':	//Prepare the My Leaves Pages
