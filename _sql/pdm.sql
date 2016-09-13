@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Sep 13, 2016 at 07:03 PM
+-- Generation Time: Sep 13, 2016 at 07:11 PM
 -- Server version: 5.5.46-0+deb8u1
 -- PHP Version: 5.6.14-0+deb8u1
 
@@ -19,6 +19,24 @@ SET time_zone = "+00:00";
 --
 -- Database: `pdm`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `antikatastatis_proistamenos`
+--
+
+CREATE TABLE IF NOT EXISTS `antikatastatis_proistamenos` (
+`primkey` int(11) NOT NULL,
+  `DieuthinsiID` varchar(20) NOT NULL COMMENT 'Βοηθητικό πεδίο για την γρήγορη αναζήτηση της Δ/νσης',
+  `DieuthintisAFM` varchar(20) NOT NULL COMMENT 'Βοηθητικό πεδίο για την γρήγορη αναζήτηση του απόντα Δ/ντη',
+  `antikat_afm_a` varchar(20) NOT NULL,
+  `antikat_afm_b` varchar(20) DEFAULT NULL,
+  `antikatastasi_apo` date NOT NULL,
+  `antikatastasi_eos` date NOT NULL,
+  `energos` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT 'true εάν ο αντικαταστάτης είναι ενεργός, flase διαφορετικά',
+  `date_anenergos` date DEFAULT NULL COMMENT 'Εάν ο αντικαταστάτης τεθεί ανενεργός η ημερομηνία που ορίστηκε'
+) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -95,6 +113,12 @@ CREATE TABLE IF NOT EXISTS `main_users` (
 --
 
 --
+-- Indexes for table `antikatastatis_proistamenos`
+--
+ALTER TABLE `antikatastatis_proistamenos`
+ ADD PRIMARY KEY (`primkey`);
+
+--
 -- Indexes for table `leaves`
 --
 ALTER TABLE `leaves`
@@ -116,6 +140,11 @@ ALTER TABLE `main_users`
 -- AUTO_INCREMENT for dumped tables
 --
 
+--
+-- AUTO_INCREMENT for table `antikatastatis_proistamenos`
+--
+ALTER TABLE `antikatastatis_proistamenos`
+MODIFY `primkey` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=102;
 --
 -- AUTO_INCREMENT for table `leaves`
 --
