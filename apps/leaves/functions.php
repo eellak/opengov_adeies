@@ -192,7 +192,7 @@
 	function get_my_employees_leaves(){ //Εμφάνιση αιτήσεων άδειας των υφισταμένων ενός χρήστη
 		global $db, $user, $message_list, $application_list;
 		
-		if(!empty($user->unit_gd)){
+		if(!empty($user->unit_gd) and trim($user->unit_gd) != 'gram0-6'){
 		
 			if($user->type == 'proist/nos_diefthyns'){
 				$query = $db->prepare('SELECT * FROM `main_users` where unit_gd = :unit_gd AND afm !=:afm and active=1 ORDER BY  last_name ASC' );
@@ -214,7 +214,7 @@
 				$all_leaves = array_merge($cur_leaves, $all_leaves);
 			}
 			return $all_leaves; 
-		} else { // This is someone else.. The Overall Administrator
+		} else if(trim($user->unit_gd) == 'gram0-6') { // This is someone else.. The Overall Administrator
 			 if(trim($user->username) == $application_list['leaves']['in_app_users']['overall']){
 				$query = $db->prepare('SELECT * FROM `main_users` where active=1 ORDER BY  last_name ASC' );
 				$query->execute();

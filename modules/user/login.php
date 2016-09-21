@@ -30,15 +30,16 @@
 			<div id="headerlogin">
 				<a href="index.php"/><img id="headerlogo" src="<?=URL?>/assets/img/logo.png" alt="Περιφέρεια Δυτικής Μακεδονίας" /></a>
 			</div>
-            <div class="col-md-4 col-md-offset-4">
+            <div class="col-md-4 col-md-offset-4 text-center">
                 <div class="login-panel panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Σύνδεση Χρήστη</h3>
+                        <h3 class="panel-title">Σύνδεση Χρήστη στις Εσωτερικές Εφαρμογές της Περιφέρειας</h3>
                     </div>
                     <div class="panel-body">
 						<?php echo user_get_login_url(array('btn', 'btn-lg', 'btn-success', 'btn-block'));?>
                     </div>
                 </div>
+				<a href="<?=URL?>/people.php" target="_blank">Κατάλογος Χρηστών</a>
             </div>
         </div>
     </div>

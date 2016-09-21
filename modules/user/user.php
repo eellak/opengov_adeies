@@ -54,7 +54,8 @@
 		global $user_auth, $user, $db;
 			
 		$username_temp = $user_auth->getAuthData('saml:sp:NameID');
-		$username = str_replace('PDM.GOV.GR/', '', $username_temp['Value']);
+		//$username = str_replace('PDM.GOV.GR/', '', $username_temp['Value']);
+		$username = str_replace(array('PDM/', '@carbon.super'), '', $username_temp['Value']);
 		$query = $db->prepare('SELECT * from main_users where username = :username');
 		$query->bindValue(':username', 			$username, 				PDO::PARAM_STR);
 		$query->execute();
