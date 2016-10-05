@@ -18,9 +18,11 @@
 		if(get_user_is('director')){ //Αν ο χρήστης έχει αυξημένα δικαιώματα, προσθήκη επιπλέον επιλογών
 			$side_menu[] = array('url' => URL.'/?p=leaves|applications', 	'class' => 'fa fa-users fa-fw', 		'text' => 'Αιτήσεις Υπαλλήλων');
 			$side_menu[] = array('url' => URL.'/?p=leaves|statistics', 	'class' => 'fa fa-bar-chart-o fa-fw', 		'text' => 'Στατιστικά Αδειών');
-			if(user_is_manager('manager')) {
+			if( user_is_manager('manager') ) {
 				$side_menu[] = array('url' => URL.'/?p=leaves|manage', 	'class' => 'fa fa-calendar-o fa-fw', 		'text' => 'Διαχείριση Ημερών');
-				$side_menu[] = array('url' => URL.'/?p=leaves|OrismosAntikatastati', 	'class' => 'fa fa-calendar-o fa-fw', 		'text' =>'Ορισμός Αντικαταστάτη Προϊστάμενου');		
+			}
+			if (get_user_is('proist/nos_diefthyns')) {
+				$side_menu[] = array('url' => URL.'/?p=leaves|OrismosAntikatastati', 	'class' => 'fa fa-calendar-o fa-fw', 		'text' =>'Ορισμός Αντικαταστάτη Προϊστάμενου');	
 			}
 		}
 	}
@@ -67,6 +69,12 @@
 				break;
 			case 'manage':		//Prepare the Manage Leaves Days Page
 				$js_files[] =  array('head' => false, 'path' => 'apps/leaves/js/manage_days.js');
+				break;
+			case 'OrismosAntikatastati':			//Prepare the Orismos Antikatastati Page
+				$css_files[] = array('path' => 'assets/lib/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css');
+				$js_files[] =  array('head' => false, 'path' => 'assets/lib/bootstrap-datetimepicker/moment.min.js');
+				$js_files[] =  array('head' => false, 'path' => 'assets/lib/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js');
+				$js_files[] =  array('head' => false, 'path' => 'apps/leaves/js/OrismosAntikatastati.js');
 				break;
 			case 'recall':		//Prepare the Recall Application Page
 				$js_files[] =  array('head' => false, 'path' => 'apps/leaves/js/recall_leave.js');

@@ -12,6 +12,52 @@
 		}
 	}
 	
+	
+	
+	
+	function get_user_afm() { //afm ΤΡΈΧΩΝ ΧΡΗΣΤΗ
+		global  $user;
+		return  $user->afm;
+	}
+	
+	function get_user_dieuthinsi() {  // ΔΙΕΥΘΥΝΣΗ ΠΟΥ ΑΝΗΚΕΙ Ο ΤΡΕΧΩΝ ΧΡΗΣΤΗΣ
+		global  $user;
+		return  $user->unit_g;
+	}
+	
+	function afm_to_name($afm){ //Επιστρέφει το Ονοματεπώνυμο του user με ΑΦΜ $afm 
+		global $db;
+		$query = $db->prepare('SELECT first_name, last_name FROM main_users WHERE afm = :afm' );
+		$query->bindValue(':afm',	$afm,				PDO::PARAM_STR); 
+		$query->execute();
+		$row = $query->fetch();
+		return $row['first_name']. " ".$row['last_name'];
+		
+	} 
+	
+	function afm_to_email($afm){ //Επιστρέφει το email του user με ΑΦΜ $afm 
+		global $db;
+		$query = $db->prepare('SELECT email FROM main_users WHERE afm = :afm' );
+		$query->bindValue(':afm',	$afm,				PDO::PARAM_STR); 
+		$query->execute();
+		$row = $query->fetch();
+		return $row['email'];
+		
+	} 
+	
+	function afm_to_id($afm){ //επιστρέφει το id en;ow xr;hsth me ΑΦΜ $afm.
+		global $db;
+		$query = $db->prepare('SELECT id FROM main_users WHERE afm = :afm' );
+		$query->bindValue(':afm',	$afm,				PDO::PARAM_STR); 
+		$query->execute();
+		$row = $query->fetch();
+		return $row['id'];
+		
+	} 
+	
+	
+	
+	
 	function get_remaining_leaves_for_user($user_id){ //Μέθοδος για εμφάνιση υπολοίπου ημερών άδειας οποιουδήποτε χρήστη
 		global $db;
 		
@@ -23,6 +69,8 @@
 		
 		return $leaves->remaining_leaves;
 	}
+	
+	
 	
 	function get_all_leaves(){
 		global $db;
@@ -39,9 +87,18 @@
 			global $db, $user, $message_list;
 			
 			// Check if the number of days requested is available (remaining days)
-			if(intval(trim($_POST['num_leaves'])) > get_remaining_leaves()){
-				$message_list[] = array( 'type' => 'danger', 'message'	=> 'Σφάλμα! Το υπόλοιπο των ημερών αδείας σας δεν επαρκεί.' );
-				return;
+			if (trim($_POST['leave_type']) == 2) {
+				$afm = trim($_POST['user_tel']);
+				if( intval(trim($_POST['num_leaves'])) > get_remaining_leaves_for_user(afm_to_id($afm)) ){
+					$message_list[] = array( 'type' => 'danger', 'message'	=> 'Σφάλμα! Το υπόλοιπο των ημερών αδείας του υπαλλήλου σας δεν επαρκεί.' );
+					return;
+				}
+			}
+			else {
+				if(intval(trim($_POST['num_leaves'])) > get_remaining_leaves()){
+					$message_list[] = array( 'type' => 'danger', 'message'	=> 'Σφάλμα! Το υπόλοιπο των ημερών αδείας σας δεν επαρκεί.' );
+					return;
+				}
 			}
 			
 			$query = $db->prepare('INSERT INTO leaves_submissions (leave_id, employee_afm, type_id, date_submitted, submitted_by, date_starts, date_ends, num_leaves, ip_submitted, remaining_leaves, filename) VALUES(NULL, :employee_afm, :type_id, :date_submitted, :submitted_by, :date_starts, :date_ends, :num_leaves, :ip_submitted, :remaining_leaves, :filename)');
@@ -133,8 +190,8 @@
 
 			//echo $query->getSQL(); //For debug
 		}
-	}
 	
+	}
 	/* 	-------------------------------------------------------------------------------------
 	*	Save Canceled Application Details
 	*  -------------------------------------------------------------------------------------*/
@@ -189,6 +246,148 @@
 		return $query->fetchAll();	
 	}
 	
+	
+	
+	
+	
+	/******************   FUNCTIONS ΓΙΑ ΤΟΝ ΟΡΙΣΜΟ ΑΝΤΙΚΑΤΑΣΤΑΤΗ           ****************************************************/
+	function IsEmployeeAntikatastatisProistamenos() {
+		global $db, $user;
+		//$sql="SELECT primkey FROM antikatastatis_proistamenos where DieuthinsiID = :unit_g AND antikatastasi_apo<= CURDATE() AND CURDATE()<=antikatastasi_eos AND energos=1 AND (:AFM=antikat_afm_a OR :AFM=antikat_afm_b)" ;
+		$query = $db->prepare('SELECT primkey FROM `antikatastatis_proistamenos` where DieuthinsiID = :unit_g AND antikatastasi_apo<= CURDATE() AND CURDATE()<=antikatastasi_eos AND energos=1 AND (:AFM=antikat_afm_a OR :AFM=antikat_afm_b)');
+		$query->bindValue(':unit_g', 	$user->unit_g,				PDO::PARAM_STR); 
+		$query->bindValue(':AFM', 	$user->afm,				PDO::PARAM_STR);
+		$query->execute();
+		if ($query->rowCount() != 0) return true; else return false;
+	}
+	
+	/* function is_dieuthintis_apon() {
+		$sql="SELECT primkey FROM `antikatastatis_proistamenos` where DieuthinsiID = :unit_g AND antikatastasi_apo<= CURDATE() AND CURDATE()<=antikatastasi_eos" ;
+		
+		$query = $db->prepare($sql);
+		$query->bindValue(':unit_g', 	$user->unit_g,				PDO::PARAM_STR);  
+		$query->execute();
+		if ($query->rowCount() != 0) return true; else return false;
+	}  */
+	
+	
+	function save_edit_antikatastatis_proistamenos(){
+		if(!user_is_manager('manager')) return;
+		
+		global $db, $message_list;
+		/*  echo "Antikatastatis1_afm:".$_POST['Antikatastatis1_afm']."\r\n";
+		 echo "Antikatastatis2_afm:".$_POST['Antikatastatis2_afm']."\r\n";
+		 echo "AntikatastatisApo:".strtotime($_POST['AntikatastatisApo'])."\r\n";
+		 echo "AntikatastatisEws:".$_POST['AntikatastatisEws']."\r\n";
+		 echo "DieuthinsiID:".$_POST['dieuthinsi_id']."\r\n";
+		 echo "trim_DieuthinsiID:".trim($_POST['dieuthinsi_id'])."\r\n";
+		 echo "DieuthintisAFM:".$_POST['dieuthintis_afm']."\r\n"; */
+		 
+	     //testara();
+		if ( isset($_POST['Antikatastatis1_afm'])  || isset($_POST['Antikatastatis2_afm']) ||  isset($_POST['AntikatastatisApo']) || isset($_POST['AntikatastatisEws']) ) {
+			if ((is_null($_POST['Antikatastatis1_afm']) ||  $_POST['Antikatastatis1_afm']==0) || trim($_POST['AntikatastatisApo'])=="" || trim($_POST['AntikatastatisEws'])=="" ) {
+				$message_list[] = array( 'type' => 'warning', 'message'	=> 'Δεν έχουν συμπληρωθεί όλα τα απαιτούμενα στοιχεία' );
+			}
+			else { 
+				$query_l = $db->prepare("INSERT INTO antikatastatis_proistamenos (DieuthintisAFM, DieuthinsiID, antikat_afm_a, antikat_afm_b, antikatastasi_apo, antikatastasi_eos) VALUES(:DieuthintisAFM, '".$_POST['dieuthinsi_id']."', :anti_afm_A, :anti_afm_B, :antikat_apo, :antikat_eos)");
+//				$query_l->bindValue(':idDieuthinsi', 					trim($_POST['dieuthinsi_id)']), 			PDO::PARAM_INT);
+				$query_l->bindValue(':DieuthintisAFM', 					trim($_POST['dieuthintis_afm']), 			PDO::PARAM_INT);
+				$query_l->bindValue(':anti_afm_A', 					trim($_POST['Antikatastatis1_afm']), 			PDO::PARAM_INT);
+				$query_l->bindValue(':anti_afm_B', 					trim($_POST['Antikatastatis2_afm']), 			PDO::PARAM_INT);
+				$query_l->bindValue(':antikat_apo', 			trim($_POST['AntikatastatisApo']), 	PDO::PARAM_INT);
+				$query_l->bindValue(':antikat_eos', 		trim($_POST['AntikatastatisEws']), 	PDO::PARAM_INT);
+				
+				$query_l->execute();
+				
+				
+				if ($query_l->rowCount() != 0) {
+					$message_list[] = array( 'type' => 'success', 'message'	=> 'Ο Αντικαταστάτης ορίσθηκε επιτυχώς..' );
+					
+					
+					//send email to antikatastatisA
+					$afm1=trim($_POST['Antikatastatis1_afm']);
+					$subject 	= 'Ορισμός Αντικαταστάτη Προϊστάμενου'; 
+					$address1 	= afm_to_email($afm1);
+					$receiver1	= afm_to_name($afm1);
+					$body1 		= '<p>Έχετε οριστεί πρώτος Αντικαταστάτης Προϊστάμενος</p>';
+					$body1 		.= '<p>από '.PrintDate(trim($_POST['AntikatastatisApo'])).' έως '.PrintDate(trim($_POST['AntikatastatisEws'])).'</p>';
+					email_send($address1, $receiver1, $subject, $body1);
+					//send email to antikatastatisΒ
+					if (!is_null($_POST['Antikatastatis2_afm']) &&  $_POST['Antikatastatis2_afm']!=0) {
+						$afm2=trim($_POST['Antikatastatis2_afm']);
+						$address2 	= afm_to_email($afm2);
+						$receiver2	= afm_to_name($afm2);
+						$body2 		= '<p>Έχετε οριστεί δεύτερος Αντικαταστάτης Προϊστάμενος</p>';
+						$body2 		.= '<p>από '.PrintDate(trim($_POST['AntikatastatisApo'])).' έως '.PrintDate(trim($_POST['AntikatastatisEws'])).'</p>';
+						email_send($address2, $receiver2, $subject, $body2);
+					}
+					
+				}else{
+					$message_list[] = array( 'type' => 'danger', 'message'	=> 'Σφάλμα! Πρόβλημα κατα την ενημέρωση!' );
+				} 
+			}
+		}
+		
+	}
+	
+	
+	function PausiEnergouAntikatastati($id){  // Παύση ενεργού(ων) αντικαταστάτη(ων) Προϊσταμένου με id $id. Επιστρέφει true, εάν η αντικατάσταση έγινε επιτυχώς διαφορετικά επιστρέφει false
+		global $db;
+		$str="UPDATE antikatastatis_proistamenos set energos=0, date_anenergos='".date("Y-m-d H:i:s")."' where primkey = :IDAntikatastati";
+		// echo $str;
+		// papara();
+		$query = $db->prepare($str);
+		$query->bindValue(':IDAntikatastati', 	$id,				PDO::PARAM_STR); 
+		$query->execute();
+		if ($query->rowCount() != 0) {
+			//send email to antikatastatisA
+			$query = $db->prepare('SELECT * FROM antikatastatis_proistamenos WHERE primkey = :IDAntikatastati' );
+			$query->bindValue(':IDAntikatastati', 	$id,				PDO::PARAM_STR); 
+			$query->execute();
+			$row = $query->fetch();
+			 
+			$afm1=$row['antikat_afm_a'];
+			$subject 	= 'Παύση Αντικαταστάτη Προϊστάμενου'; 
+			$address1 	= afm_to_email($afm1);
+			// $address1='th.michtis@pdm.gov.gr';
+			$receiver1	= afm_to_name($afm1);
+			
+			$body1 		= '<p>Ο ορισμός σας ως πρώτο Αντικαταστάτη Προϊστάμενο</p>';
+			$body1 		.= '<p>από '.PrintDate($row['antikatastasi_apo']).' έως '.PrintDate($row['antikatastasi_eos']).' έχει αναιρεθεί.</p>';
+			/* echo "address1:".$address1."\r\n";
+			echo "receiver1:".$receiver1."\r\n";
+			echo "subject:".$subject."\r\n";
+			echo "body1:".$body1."\r\n"; */
+			//papara();
+			email_send($address1, $receiver1, $subject, $body1);
+			//send email to antikatastatisΒ
+			if (!is_null($row['antikat_afm_b']) && $row['antikat_afm_b']!=0) {
+				$afm2=$row['antikat_afm_b'];
+				$address2 	= afm_to_email($afm2);
+				// $address2='th.michtis@pdm.gov.gr';
+				$receiver2	= afm_to_name($afm2);
+				$body2 		= '<p>Ο ορισμός σας ως δεύτερος Αντικαταστάτη Προϊστάμενο</p>';
+				$body2 		.= '<p>από '.PrintDate($row['antikatastasi_apo']).' έως '.PrintDate($row['antikatastasi_eos']).' έχει αναιρεθεί.</p>';
+				email_send($address2, $receiver2, $subject, $body2);
+			}
+			return true;
+		}
+		else return false;
+	}
+	
+	function get_my_trexon_antikatastates(){ //Εμφάνιση των αντικαταστατών προϊσταμένων που έχουν οριστεί από τον Διευθυντή για το τρέχον χρονικό διάστημα
+		global $db, $user;
+		
+		$query = $db->prepare('SELECT primkey, antikat_afm_a, antikat_afm_b, antikatastasi_apo, antikatastasi_eos FROM antikatastatis_proistamenos WHERE DieuthinsiID = :dnsi AND energos=1 AND CURDATE()<=antikatastasi_eos ORDER BY  antikatastasi_eos' );
+		$query->bindValue(':dnsi', 	$user->unit_g,				PDO::PARAM_STR); 
+		$query->execute();
+		$antikatastates = $query->fetchAll();
+		return $antikatastates;
+	}
+	
+	/*************************************************************************************************************************************/
+	
+	
 	function get_my_employees_leaves(){ //Εμφάνιση αιτήσεων άδειας των υφισταμένων ενός χρήστη
 		global $db, $user, $message_list, $application_list;
 		
@@ -214,7 +413,8 @@
 				$all_leaves = array_merge($cur_leaves, $all_leaves);
 			}
 			return $all_leaves; 
-		} else if(trim($user->unit_gd) == 'gram0-6') { // This is someone else.. The Overall Administrator
+		// } else if(trim($user->unit_gd) == 'gram0-6') { // This is someone else.. The Overall Administrator
+			} else if(empty($user->unit_gd)) { // This is someone else.. The Overall Administrator
 			 if(trim($user->username) == $application_list['leaves']['in_app_users']['overall']){
 				$query = $db->prepare('SELECT * FROM `main_users` where active=1 ORDER BY  last_name ASC' );
 				$query->execute();
@@ -228,6 +428,8 @@
 			 }
 		}
 	}
+	
+	
 	
 	function get_leave_user($employee_afm){ //Εμφάνιση χρήστη βάσει ΑΦΜ
 		global $db;
@@ -295,6 +497,27 @@
 				$query->execute();
 				return $query->fetchAll();	
 			 }
+		}
+	}
+		
+	function get_employeesProistamenous(){ // εμφανίζει τους Προϊσταμένους Τμήματος της τρέχουσας Δ/νσης
+		global $db, $user, $message_list;
+		if(!empty($user->unit_gd)){
+			if($user->type == 'proist/nos_diefthyns'){
+			$sql="SELECT * FROM `main_users` where unit_g = :unit_g AND type = 'proist/nos_tmimatos' AND afm !=:afm ORDER BY  last_name ASC" ;
+			$query = $db->prepare($sql);
+			$query->bindValue(':unit_g', 	$user->unit_g,				PDO::PARAM_STR);  
+			}elseif($user->type == 'proist/nos_gen_dieft'){
+				$query = $db->prepare('SELECT * FROM `main_users` where unit_g = :unit_g AND afm !=:afm ORDER BY  last_name ASC' );
+				$query->bindValue(':unit_g', 	$user->unit_g,				PDO::PARAM_STR); 
+			}else{ //proist/nos_tmimatos
+				$query = $db->prepare('SELECT * FROM `main_users` where unit_g = :unit_g AND afm !=:afm AND type NOT IN (\'proist/nos_diefthyns\', \'proist/nos_gen_dieft\') ORDER BY  last_name ASC' );
+				$query->bindValue(':unit_g', 	$user->unit_g,				PDO::PARAM_STR); 
+			}
+			
+			$query->bindValue(':afm', 		$user->afm, 				PDO::PARAM_STR); 	
+			$query->execute();
+			return $query->fetchAll();	
 		}
 	}
 	
@@ -435,7 +658,7 @@
 	}		
 	
 	function save_edit_user_leaves(){
-		if(!user_is_manager('manager')) return;
+		if(!user_is_manager('manager') || !IsEmployeeAntikatastatisProistamenos() ) return;
 		
 		global $db, $message_list;
 		
@@ -457,6 +680,7 @@
 			} 
 		}
 	}
+    
 	
 	// Given a Leave Object returns the User Object for that Leave
 	function get_user_by_leave($leave){ 

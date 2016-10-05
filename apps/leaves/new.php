@@ -3,6 +3,9 @@
 		<h3 class="page-title">Υποβολή Νέας Αίτησης</h3>
 	</div>
 </div>
+
+
+</script>
  <?php 
 	save_new_application();
 	print_messages();
@@ -50,6 +53,9 @@
 								<select name="user_tel" class="form-control" id="user_tel">
 								<?php 
 									$employees = get_employees(); //Φόρτωση υφισταμένων
+									?>
+									<option selected  value='0'><ΕΠΕΛΕΞΕ ΥΠΑΛΛΗΛΟ></option>
+									<?php 
 									foreach($employees as $employee){
 										echo '<option value="'.$employee['afm'].'" rel="'.get_remaining_leaves_for_user($employee['id']).'">'.$employee['last_name'].' '.$employee['first_name'].'</option>';
 									}
@@ -62,13 +68,13 @@
 				<div class="col-md-3">
 					<div class="form-group">
 						<label>Ημερομηνία Έναρξης</label>
-					   <input class="form-control required" name="date_starts" id="dpd1" size="16" type="text" value="ΕΕΕΕ-ΜΜ-ΗΗ"/>
+					   <input class="form-control required" name="date_starts" id="dpd1" size="16" type="text" />
 					</div> 
 				</div> 
 				<div class="col-md-3">
 					<div class="form-group">
 						<label>Ημερομηνία Λήξης</label>
-						<input class="form-control required" name="date_ends" id="dpd2" size="16" type="text" value="ΕΕΕΕ-ΜΜ-ΗΗ"/>
+						<input class="form-control required" name="date_ends" id="dpd2" size="16" type="text" />
 					</div>  
 				</div>  
 			</div> 

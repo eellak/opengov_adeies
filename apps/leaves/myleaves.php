@@ -22,9 +22,11 @@
 					<table class="table table-striped table-bordered table-hover" id="dataTables-example">
 						<thead>
 							<tr>
-								<th>Ημερομηνία Υποβολής</th>
+								<th>Ημ/νία Υποβολής</th>
 								<th>Είδος Άδειας</th>
-								<th>Αριθμός Ημερών</th>
+								<th>Αριθ. Ημερών</th>
+								<th>Από</th>
+								<th>Εώς</th>
 								<th>Κατάσταση</th>   
 								<th>Ενέργειες</th> 
 							</tr>
@@ -45,6 +47,8 @@
 								echo "<td>".printDate($leave['date_submitted'])."</td>";
 								echo "<td>".get_leave_type($leave)."</td>";
 								echo "<td>".$leave['num_leaves']."</td>";
+								echo "<td>".printDate($leave['date_starts'])."</td>";
+								echo "<td>".printDate($leave['date_ends'])."</td>";
 								echo "<td>".get_leave_status($leave)."</td>";
 								echo "<td><a href='".URL."/?p=leaves|single&id=".$leave['leave_id']."'><button type='button' class='btn btn-primary btn-circle'><i class='fa fa-eye'></i></button></a>&nbsp&nbsp";
 								echo '<a href="'.URL.'/apps/leaves/files/'.$leave['filename'].'"><button type="button" class="btn btn-success btn-circle"><i class="fa fa-arrow-circle-down"></i></button></a>';
