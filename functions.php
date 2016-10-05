@@ -14,6 +14,7 @@
 	require_once(ABSPATH.'modules/notify/notify.php');	// Load eMail functionality
 	require_once(ABSPATH.'modules/print/print.php');	// Load PDF Related Module
 	require_once(ABSPATH.'modules/views/views.php');	// Load Views Related Module
+	require_once(ABSPATH.'modules/protocol/protocol.php');	// Load Protocol Module
 
 	function initiate(){
 		include(ABSPATH.'applist.php');
