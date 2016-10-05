@@ -25,6 +25,10 @@ define('SMTP_EMAIL', 	'');		// SMTP eMail
 define('SMTP_USER', 	'');		// SMTP Username
 define('SMTP_PASS', 	'');		// SMTP Password
 
+define('PROTOCOL_USER', 	'');	// Protocol Web Service Username
+define('PROTOCOL_PASS', 	'');	// Protocol Web Service Password
+define('PROTOCOL_URL', 		'');	// Protocol Web Service WSDL url
+
 // ------ Global Variables ----------------------//
 
 global 	$user_auth,						// Session Management
