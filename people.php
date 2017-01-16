@@ -15,38 +15,46 @@ $db = new PDOTester('mysql:host='. DB_HOST .';dbname='. DB_NAME . ';charset=utf8
 
 function get_gen_department($id){
 	global $db; 
-	$query_dept = $db->prepare('SELECT * from main_departments where unit_gd=:unit_gd');
-	$query_dept->bindValue(':unit_gd', $id, PDO::PARAM_STR);
+	$query_dept = $db->prepare("SELECT * from main_departments where unit_gd=:unit_d");
+	$query_dept->bindValue(':unit_d', $id, PDO::PARAM_STR);
 	$query_dept->execute();
 	$query_dept_results = $query_dept->fetchAll();
-	return $query_dept_results[0]['gen_department'];
+	if(isset($_GET['debug']))
+		return $query_dept_results[0]['gen_department'].' ('.$id.')';
+	else
+		return $query_dept_results[0]['gen_department'];
 
 }
 
 function get_department($idg, $idgd){
 	global $db; 
-	$query_dept = $db->prepare('SELECT * from main_departments where unit_g=:unit_g and unit_gd=:unit_gd');
+	$query_dept = $db->prepare("SELECT * from main_departments where unit_g=:unit_g and unit_gd=:unit_d and unit_t = ''");
 	$query_dept->bindValue(':unit_g', $idg, PDO::PARAM_STR);
-	$query_dept->bindValue(':unit_gd', $idgd, PDO::PARAM_STR);
+	$query_dept->bindValue(':unit_d', $idgd, PDO::PARAM_STR);
 	$query_dept->execute();
 	$query_dept_results = $query_dept->fetchAll();
-	return $query_dept_results[0]['department'];
+	if(isset($_GET['debug']))
+		return $query_dept_results[0]['department'].' ('.$idgd.' -> '.$idg.')';
+	else
+		return $query_dept_results[0]['department'];
 }
 
 function get_office($idg, $idgd, $idt){
 	global $db; 
-	$query_dept = $db->prepare('SELECT * from main_departments where unit_g=:unit_g and unit_gd=:unit_gd and unit_t=:unit_t');
+	$query_dept = $db->prepare("SELECT * from main_departments where unit_g=:unit_g and unit_gd=:unit_d and unit_t=:unit_t");
 	$query_dept->bindValue(':unit_g', $idg, PDO::PARAM_STR);
-	$query_dept->bindValue(':unit_gd', $idgd, PDO::PARAM_STR);
+	$query_dept->bindValue(':unit_d', $idgd, PDO::PARAM_STR);
 	$query_dept->bindValue(':unit_t', $idt, PDO::PARAM_STR);
 	$query_dept->execute();
 	$query_dept_results = $query_dept->fetchAll();
 	//echo $query_dept->getSQL() ;
-	return $query_dept_results[0]['office'];
-	
+		if(isset($_GET['debug']))
+		return $query_dept_results[0]['office'].' ('.$idgd.' -> '.$idg.' -> '.$idt.')';
+	else
+		return $query_dept_results[0]['office'];	
 }
 
-$query_all = $db->prepare('SELECT * from main_users');
+$query_all = $db->prepare('SELECT * from main_users where active = 1');
 $query_all->execute();
 $all_list = $query_all->fetchAll();
 

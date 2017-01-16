@@ -90,5 +90,15 @@
 		return trim($user->type) == trim($type);
 	}
 	
+	function check_active_user(){
+		global $user;
+		global $user_auth;
+		
+		$user_auth->requireAuth();
+		$url = $user_auth->getLogoutURL();
+		
+		if(!$user->active) header('Location: '.$url);
+	}
+	
 	
 ?>
