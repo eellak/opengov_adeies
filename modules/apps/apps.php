@@ -25,6 +25,11 @@
 			else return false;
 		} 
 		
+		if($app['group_specific']){
+			if(in_array($user->type, $app['groups'])) return true;
+			else return false;
+		} 
+		
 		return true;
 	}
 	

@@ -39,7 +39,9 @@
 						<?php echo user_get_login_url(array('btn', 'btn-lg', 'btn-success', 'btn-block'));?>
                     </div>
                 </div>
-				<a href="<?=URL?>/people.php" target="_blank">Κατάλογος Χρηστών</a>
+				<p class="text-center">
+					<a href="<?=URL?>/resetpass.php">Αλλαγή Συνθηματικού</a> | <a href="<?=URL?>/people.php" target="_blank">Κατάλογος Χρηστών</a>
+				</p>
             </div>
         </div>
     </div>
