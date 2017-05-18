@@ -28,6 +28,10 @@
 	/* 	-------------------------------------------------------------------------------------
 	*  Prints Array on Object in listed tree structure
 	*  -------------------------------------------------------------------------------------*/
+	/* 
+	 * Recursively creates itself into building nested <ul> elements for 
+	 * each nested array, covers both serialized and unserialized cases
+	 */
 	function print_pretty($arr){
 		$retStr = '<ul>';
 		if (is_array($arr)){
@@ -57,6 +61,7 @@
 		$data = trim( $data );
 		if ( 'N;' == $data )
 			return true;
+		// note: preg_match third argument is a &variable so it is initialized and filled when the function executes
 		if ( !preg_match( '/^([adObis]):/', $data, $badions ) )
 			return false;
 		switch ( $badions[1] ) {
